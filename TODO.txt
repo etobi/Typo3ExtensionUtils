@@ -1,2 +1,4 @@
-* upload to TER
-* update md5 in ext_emconf
+√ upload to TER
+* update md5s in ext_emconf
+* extract from .t3x
+* create .t3x from path
