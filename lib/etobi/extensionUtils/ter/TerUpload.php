@@ -53,6 +53,7 @@ class TerUpload {
 	 *
 	 */
 	public function execute() {
+		$this->checkRequirements();
 		$soap = new Soap();
 		$soap->init(array(
 			'wsdl' => $this->wsdlURL,
@@ -72,6 +73,21 @@ class TerUpload {
 		return $response;
 	}
 
+	protected function checkRequirements() {
+		if (empty($this->username) || empty($this->password)) {
+			throw new \Exception('typo3.org credentials missing.');
+		}
+		if (empty($this->extensionKey)) {
+			throw new \Exception('extension key missing.');
+		}
+		if (empty($this->uploadComment)) {
+			throw new \Exception('extension key missing.');
+		}
+		if (!is_dir($this->path) || !is_readable($this->path . '/' . 'ext_emconf.php')) {
+			throw new \Exception('Cant read "' . $this->path . '/' . 'ext_emconf.php' . '"');
+		}
+	}
+
 	/**
 	 * @return array
 	 */
@@ -87,42 +103,38 @@ class TerUpload {
 	 */
 	protected function getExtensionData() {
 		$emConf = $this->getEmConf();
-		$misc = array( // TODO
-			'codelines' => 0,
-			'codebytes' => 0
-		);
 
 		return array(
 			'extensionKey' => utf8_encode($this->extensionKey),
 			'version' => utf8_encode($emConf['version']),
 			'metaData' => array(
 				'title' => utf8_encode($emConf['title']),
-				'description' => utf8_encode($emConf['description']),
-				'category' => utf8_encode($emConf['category']),
-				'state' => utf8_encode($emConf['state']),
-				'authorName' => utf8_encode($emConf['author']),
-				'authorEmail' => utf8_encode($emConf['author_email']),
-				'authorCompany' => utf8_encode($emConf['author_company']),
+				'description' => isset($emConf['description']) ? utf8_encode($emConf['description']) : '',
+				'category' => isset($emConf['category']) ? utf8_encode($emConf['category']) : '',
+				'state' => isset($emConf['state']) ? utf8_encode($emConf['state']) : '',
+				'authorName' => isset($emConf['author']) ? utf8_encode($emConf['author']) : '',
+				'authorEmail' => isset($emConf['author_email']) ? utf8_encode($emConf['author_email']) : '',
+				'authorCompany' => isset($emConf['author_company']) ? utf8_encode($emConf['author_company']) : '',
 			),
 			'technicalData' => array(
 				'dependencies' => $this->getDependenciesArray(),
-				'loadOrder' => utf8_encode($emConf['loadOrder']),
-				'uploadFolder' => (boolean) intval($emConf['uploadfolder']),
-				'createDirs' => utf8_encode($emConf['createDirs']),
-				'shy' => (boolean) intval($emConf['shy']),
-				'modules' => utf8_encode($emConf['module']),
-				'modifyTables' => utf8_encode($emConf['modify_tables']),
-				'priority' => utf8_encode($emConf['priority']),
-				'clearCacheOnLoad' => (boolean) intval($emConf['clearCacheOnLoad']),
-				'lockType' => utf8_encode($emConf['lockType']),
-				'doNotLoadInFE' => utf8_encode($emConf['doNotLoadInFE']),
-				'docPath' => utf8_encode($emConf['docPath']),
+				'loadOrder' => isset($emConf['loadOrder']) ? utf8_encode($emConf['loadOrder']) : '',
+				'uploadFolder' => isset($emConf['uploadfolder']) ? (boolean) intval($emConf['uploadfolder']) : FALSE,
+				'createDirs' => isset($emConf['createDirs']) ? utf8_encode($emConf['createDirs']) : '',
+				'shy' => isset($emConf['shy']) ? (boolean) intval($emConf['shy']) : FALSE,
+				'modules' => isset($emConf['module']) ? utf8_encode($emConf['module']) : '',
+				'modifyTables' => isset($emConf['modify_tables']) ? utf8_encode($emConf['modify_tables']) : '',
+				'priority' => isset($emConf['priority']) ? utf8_encode($emConf['priority']) : '',
+				'clearCacheOnLoad' => isset($emConf['clearCacheOnLoad']) ? (boolean) intval($emConf['clearCacheOnLoad']) : FALSE,
+				'lockType' => isset($emConf['lockType']) ? utf8_encode($emConf['lockType']) : '',
+				'doNotLoadInFE' => isset($emConf['doNotLoadInFE']) ? utf8_encode($emConf['doNotLoadInFE']) : '',
+				'docPath' => isset($emConf['docPath']) ? utf8_encode($emConf['docPath']) : '',
 			),
 			'infoData' => array(
-				'codeLines' => intval($misc['codelines']),
-				'codeBytes' => intval($misc['codebytes']),
-				'codingGuidelinesCompliance' => utf8_encode($emConf['CGLcompliance']),
-				'codingGuidelinesComplianceNotes' => utf8_encode($emConf['CGLcompliance_note']),
+				'codeLines' => 0,
+				'codeBytes' => 0,
+				'codingGuidelinesCompliance' => isset($emConf['CGLcompliance']) ? utf8_encode($emConf['CGLcompliance']) : '',
+				'codingGuidelinesComplianceNotes' => isset($emConf['CGLcompliance_note']) ? utf8_encode($emConf['CGLcompliance_note']) : '',
 				'uploadComment' => utf8_encode($this->uploadComment),
 				'techInfo' => array(),
 			),
@@ -137,6 +149,9 @@ class TerUpload {
 			$_EXTKEY = $this->extensionKey;
 			require $this->path . '/' . 'ext_emconf.php';
 			$this->emConf = $EM_CONF[$_EXTKEY];
+			if (empty($this->emConf['title']) || empty($this->emConf['version'])) {
+				throw new \Exception('Invalid $EM_CONF');
+			}
 		}
 		return $this->emConf;
 	}
@@ -147,6 +162,7 @@ class TerUpload {
 	protected function getDependenciesArray() {
 		$emConf = $this->getEmConf();
 		$extKeysArr = $emConf['constraints']['depends'];
+		$dependenciesArr = array();
 
 		if (is_array($extKeysArr)) {
 			foreach ($extKeysArr as $extKey => $version) {
@@ -188,7 +204,7 @@ class TerUpload {
 
 	/**
 	 * @return array
-	 * @throws Exception
+	 * @throws \Exception
 	 */
 	protected function getFilesData() {
 		$fileArr = array();
@@ -200,7 +216,7 @@ class TerUpload {
 		}
 
 		if ($totalSize >= $this->maxUploadSize) {
-			throw new Exception('Maximum upload size exceeded (' . $this->maxUploadSize . ').');
+			throw new \Exception('Maximum upload size exceeded (' . $this->maxUploadSize . ').');
 		}
 
 		$filesData = array();

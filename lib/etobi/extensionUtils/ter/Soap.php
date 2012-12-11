@@ -80,7 +80,7 @@ class Soap {
 			}
 		}
 
-		$options['format'] = $options['format'] == 'object' ? 'object' : 'array';
+		$options['format'] = isset($options['format']) && $options['format'] == 'object' ? 'object' : 'array';
 
 		if ($options !== false) {
 			$this->options = (array) $options;
@@ -156,11 +156,11 @@ class Soap {
 			}
 		}
 
-		if ($this->options['authentication'] == 'prefix') {
+		if (isset($this->options['authentication']) && $this->options['authentication'] == 'prefix') {
 			$param = array_merge(array('reactid' => $this->reactid), $param);
 		}
 
-		if ($this->options['prefix']) {
+		if (isset($this->options['prefix']) && $this->options['prefix']) {
 			$func = $this->options['prefix'] . ucfirst($func);
 		}
 		$this->error = false;
@@ -177,7 +177,7 @@ class Soap {
 	 */
 	function callPhpSOAP($func, $param) {
 		$header = null;
-		if ($this->options['authentication'] == 'headers') {
+		if (isset($this->options['authentication']) && $this->options['authentication'] == 'headers') {
 			if ($this->reactid) {
 				$header = new \SoapHeader(
 					'', 'HeaderAuthenticate',
@@ -207,7 +207,7 @@ class Soap {
 			return false;
 		}
 
-		if (is_a($this->client->headersIn['HeaderAuthenticate'], 'stdClass')) {
+		if (property_exists($this->client, 'headersIn') && is_a($this->client->headersIn['HeaderAuthenticate'], 'stdClass')) {
 			$this->reactid = $this->client->headersIn['HeaderAuthenticate']->reactid;
 		}
 
