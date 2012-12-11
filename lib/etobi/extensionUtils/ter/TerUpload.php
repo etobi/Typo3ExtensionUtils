@@ -116,7 +116,7 @@ class TerUpload {
 			throw new \Exception('extension key missing.');
 		}
 		if (empty($this->uploadComment)) {
-			throw new \Exception('extension key missing.');
+			throw new \Exception('upload comment missing.');
 		}
 		if (!is_dir($this->path) || !is_readable($this->path . '/' . 'ext_emconf.php')) {
 			throw new \Exception('Cant read "' . $this->path . '/' . 'ext_emconf.php' . '"');
