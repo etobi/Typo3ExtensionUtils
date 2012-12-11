@@ -12,7 +12,7 @@ class UploadController {
 	/**
 	 *
 	 */
-	public function testAction($username, $password, $extensionKey, $uploadComment, $path) {
+	public function uploadAction($username, $password, $extensionKey, $uploadComment, $path) {
 		$upload = new \etobi\extensionUtils\Ter\TerUpload();
 		$upload->setExtensionKey($extensionKey)
 			->setUsername($username)
@@ -40,5 +40,4 @@ class UploadController {
 		}
 		return FALSE;
 	}
-
 }

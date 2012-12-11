@@ -25,12 +25,11 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-/* $Id: class.tx_em_Connection_Soap.php 1978 2010-03-09 03:18:50Z mkrause $ */
 
 namespace etobi\extensionUtils\ter;
 
 /**
- * formally known as "tx_em_Connection_Soap"
+ * Formally known as "tx_em_Connection_Soap" from the TYPO3 CMS 4.5 Core.
  */
 class Soap {
 	/**

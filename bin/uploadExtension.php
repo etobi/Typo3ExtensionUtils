@@ -15,7 +15,7 @@ if (count($arguments) !== 5) {
 }
 
 $controller = new \etobi\extensionUtils\Controller\UploadController();
-$success = $controller->testAction(
+$success = $controller->uploadAction(
 	$arguments[0],
 	$arguments[1],
 	$arguments[2],
