@@ -8,9 +8,10 @@ TYPO3 CMS core isn't needed at all for this utilities.
 ## Features:
 
 * √ Upload an extension by given path to the TER (TYPO3 Extension Repository)
-* (comming) Update the MD5 sums in ext_emconf.php
-* (comming) Extract extension from a .t3x file
-* (comming) Create a .t3x from a extension path
+* (coming) Delete an extension in a certain version from TER
+* (coming) Update the MD5 sums in ext_emconf.php
+* (coming) Extract extension from a .t3x file
+* (coming) Create a .t3x from a extension path
 
 
 ### Upload Extension to TER
