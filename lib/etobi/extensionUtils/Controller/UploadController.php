@@ -13,7 +13,7 @@ class UploadController {
 	 *
 	 */
 	public function uploadAction($username, $password, $extensionKey, $uploadComment, $path) {
-		$upload = new \etobi\extensionUtils\Ter\TerUpload();
+		$upload = new \etobi\extensionUtils\ter\TerUpload();
 		$upload->setExtensionKey($extensionKey)
 			->setUsername($username)
 			->setPassword($password)
