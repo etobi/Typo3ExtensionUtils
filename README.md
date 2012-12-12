@@ -14,12 +14,17 @@ TYPO3 CMS core isn't needed at all for this utilities.
 * (coming) Create a .t3x from a extension path
 
 
+### Help
+
+Usage:
+	./bin/extension.phar help
+
 ### Upload Extension to TER
 
 Usage:
 
-	./bin/uploadExtension.php <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>
+	./bin/extension.phar <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>
 
 Example:
 
-	./bin/uploadExtension.php eTobi.de 'mySecretPassword' foobar "Minor Bugfixes and cleanup" /var/www/foobar/typo3conf/ext/foobar/
+	./bin/extension.phar eTobi.de 'mySecretPassword' foobar "Minor Bugfixes and cleanup" /var/www/foobar/typo3conf/ext/foobar/
