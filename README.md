@@ -5,7 +5,13 @@ while developing extensions from the cli. All tools work without a fully functio
 TYPO3 CMS core isn't needed at all for this utilities.
 
 
-## Features:
+## Installation
+
+	wget http://bit.ly/t3extutil -O extension.phar
+	chmod +x extension.phar
+	extension.phar help
+
+## Features
 
 * √ Upload an extension by given path to the TER (TYPO3 Extension Repository)
 * (coming) Delete an extension in a certain version from TER
@@ -17,6 +23,7 @@ TYPO3 CMS core isn't needed at all for this utilities.
 ### Help
 
 Usage:
+
 	./bin/extension.phar help
 
 ### Upload Extension to TER
