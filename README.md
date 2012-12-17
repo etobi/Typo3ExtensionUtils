@@ -7,9 +7,9 @@ TYPO3 CMS core isn't needed at all for this utilities.
 
 ## Installation
 
-	wget http://bit.ly/t3extutil -O extension.phar
-	chmod +x extension.phar
-	extension.phar help
+	wget http://bit.ly/t3xutils -O t3xutils.phar
+	chmod +x t3xutils.phar
+	t3xutils.phar help
 
 ## Features
 
@@ -24,14 +24,14 @@ TYPO3 CMS core isn't needed at all for this utilities.
 
 Usage:
 
-	./bin/extension.phar help
+	./bin/t3xutils.phar help
 
 ### Upload Extension to TER
 
 Usage:
 
-	./bin/extension.phar <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>
+	./bin/t3xutils.phar <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>
 
 Example:
 
-	./bin/extension.phar eTobi.de 'mySecretPassword' foobar "Minor Bugfixes and cleanup" /var/www/foobar/typo3conf/ext/foobar/
+	./bin/t3xutils.phar eTobi.de 'mySecretPassword' foobar "Minor Bugfixes and cleanup" /var/www/foobar/typo3conf/ext/foobar/
