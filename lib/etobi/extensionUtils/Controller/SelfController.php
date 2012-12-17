@@ -41,6 +41,9 @@ class SelfController {
 			echo 'You\'re using a different version then the latest available on github. Consider updating using the "selfupdate" command.' . chr(10);
 			echo 'Visit ' . $this->homepage . ' for more information.' . chr(10);
 			echo chr(10);
+			return FALSE;
+		} else {
+			return TRUE;
 		}
 	}
 
@@ -79,7 +82,7 @@ class SelfController {
 					throw new \Exception('The download is corrupted ('.$e->getMessage().').');
 				}
 			} else {
-				echo 'already up-to-date.';
+				echo 'already up-to-date.' . chr(10);
 			}
 		} else {
 			throw new \Exception('selfupdate does only work, when running the .phar');
