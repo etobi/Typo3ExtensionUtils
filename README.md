@@ -9,7 +9,7 @@ TYPO3 CMS core isn't needed at all for this utilities.
 
 	wget http://bit.ly/t3xutils -O t3xutils.phar
 	chmod +x t3xutils.phar
-	t3xutils.phar help
+	./t3xutils.phar help
 
 ## Features
 
