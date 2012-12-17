@@ -39,13 +39,32 @@ class Dispatcher {
 			$command = 'help';
 		}
 
+		$command = strtolower($command);
+		if ($command != 'checkforupdate' && $command != 'selfupdate') {
+			$this->checkForUpdateCommand();
+		}
+
 		$success = FALSE;
-		switch ($command) {
+		switch (strtolower($command)) {
 			case 'upload':
 				$success = $this->uploadCommand($arguments);
 				break;
 			case 'extract':
 				$success = $this->extractCommand($arguments);
+				break;
+			case 'checkforupdate':
+				$success = $this->checkForUpdateCommand();
+				break;
+			case 'selfupdate':
+				$success = $this->selfUpdateCommand();
+				break;
+			case 'version':
+				$success = TRUE;
+				if (@constant('T3XUTILS_VERSION')) {
+					echo 'Version: ' . constant('T3XUTILS_VERSION') . chr(10);
+				} else {
+					echo 'Version: ?' . chr(10);
+				}
 				break;
 			default:
 			case 'help':
@@ -62,8 +81,11 @@ class Dispatcher {
 	protected function helpCommand($command = NULL) {
 		$usages = array(
 			'help' => 'help',
+			'version' => 'version',
 			'upload' => 'upload <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>',
 			'extract' => 'extract <t3x-file> <destinationPath>',
+			'checkforupdate' => 'checkforupdate',
+			'selfupdate' => 'selfupdate'
 		);
 		echo 'Usage: ';
 		if ($command) {
@@ -79,6 +101,16 @@ class Dispatcher {
 			}
 		}
 		return TRUE;
+	}
+
+	protected function checkForUpdateCommand() {
+		$controller = new \etobi\extensionUtils\Controller\SelfController();
+		$controller->checkForUpdateAction();
+	}
+
+	protected function selfUpdateCommand() {
+		$controller = new \etobi\extensionUtils\Controller\SelfController();
+		$controller->updateAction();
 	}
 
 	/**

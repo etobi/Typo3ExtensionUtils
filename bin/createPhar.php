@@ -10,13 +10,24 @@ try {
 		__DIR__ . '/..',
 		'/(bin|lib)\/.*\.php/'
 	);
+	$command = 'git ls-remote . HEAD';
+	$output = exec($command);
+	if ($output) {
+		list($sha1) = explode("\t", $output, 2);
+	} else {
+		throw new \Exception('Cant get current SHA1');
+	}
+	echo 'create phar for "' . $sha1 .'"' . chr(10);
 	$phar->setStub(
 		'#!/usr/bin/env php
 <?php
 Phar::mapPhar("t3xutils.phar");
+define("T3XUTILS_VERSION", "' . $sha1 . '");
 require "phar://t3xutils.phar/bin/t3xutils.php";
 __HALT_COMPILER();
 ?>');
+
+	chmod($pharFilepath, 0777 & ~umask());
 } catch (Exception $e) {
     echo 'Could not create and/or modify phar:', $e;
 }
