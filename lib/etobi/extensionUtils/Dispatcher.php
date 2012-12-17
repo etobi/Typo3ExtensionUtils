@@ -44,6 +44,9 @@ class Dispatcher {
 			case 'upload':
 				$success = $this->uploadCommand($arguments);
 				break;
+			case 'extract':
+				$success = $this->extractCommand($arguments);
+				break;
 			default:
 			case 'help':
 				$success = $this->helpCommand(isset($arguments[0]) ? $arguments[0] : NULL);
@@ -60,6 +63,7 @@ class Dispatcher {
 		$usages = array(
 			'help' => 'help',
 			'upload' => 'upload <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>',
+			'extract' => 'extract <t3x-file> <destinationPath>',
 		);
 		echo 'Usage: ';
 		if ($command) {
@@ -93,6 +97,19 @@ class Dispatcher {
 			$arguments[2],
 			$arguments[3],
 			$arguments[4]
+		);
+		return $success;
+	}
+
+	protected function extractCommand($arguments) {
+		if (count($arguments) !== 2) {
+			return $this->helpCommand('extract');
+		}
+
+		$controller = new \etobi\extensionUtils\Controller\T3xController();
+		$success = $controller->extractAction(
+			$arguments[0],
+			$arguments[1]
 		);
 		return $success;
 	}
