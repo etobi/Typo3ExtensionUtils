@@ -5,11 +5,6 @@
 $pharFilepath = __DIR__ . '/../bin/t3xutils.phar';
 @unlink($pharFilepath);
 try {
-	$phar = new Phar($pharFilepath, 0, 't3xutils.phar');
-	$phar->buildFromDirectory(
-		__DIR__ . '/..',
-		'/(bin|lib)\/.*\.php/'
-	);
 	$command = 'git ls-remote . HEAD';
 	$output = exec($command);
 	if ($output) {
@@ -17,6 +12,14 @@ try {
 	} else {
 		throw new \Exception('Cant get current SHA1');
 	}
+
+	file_put_contents('pharVersion.txt', $sha1);
+
+	$phar = new Phar($pharFilepath, 0, 't3xutils.phar');
+	$phar->buildFromDirectory(
+		__DIR__ . '/..',
+		'/(bin|lib)\/.*\.php/'
+	);
 	echo 'create phar for "' . $sha1 .'"' . chr(10);
 	$phar->setStub(
 		'#!/usr/bin/env php
