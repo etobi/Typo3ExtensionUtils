@@ -26,6 +26,16 @@ Usage:
 
 	./bin/t3xutils.phar help
 
+
+### Self-update
+
+	# check if a new version is available
+	./bin/t3xutils.phar checkforupdate
+
+	# download and install the new version
+	./bin/t3xutils.phar selfupdate
+
+
 ### Upload Extension to TER
 
 Usage:
@@ -35,3 +45,4 @@ Usage:
 Example:
 
 	./bin/t3xutils.phar eTobi.de 'mySecretPassword' foobar "Minor Bugfixes and cleanup" /var/www/foobar/typo3conf/ext/foobar/
+
