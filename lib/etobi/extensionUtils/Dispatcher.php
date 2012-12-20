@@ -49,6 +49,16 @@ class Dispatcher {
 			case 'upload':
 				$success = $this->uploadCommand($arguments);
 				break;
+			case 'updateInfo':
+				$controller = new \etobi\extensionUtils\Controller\TerController();
+				$success = $controller->updateAction();
+				break;
+			case 'info':
+				$success = $this->infoCommand($arguments);
+				break;
+			case 'fetch':
+				$success = $this->fetchCommand($arguments);
+				break;
 			case 'extract':
 				$success = $this->extractCommand($arguments);
 				break;
@@ -82,6 +92,9 @@ class Dispatcher {
 		$usages = array(
 			'help' => 'help',
 			'version' => 'version',
+			'updateInfo' => 'updateInfo',
+			'info' => 'info <extensionKey> [<version]',
+			'fetch' => 'fetch <extensionKey> <version> [<destinationPath>]',
 			'upload' => 'upload <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>',
 			'extract' => 'extract <t3x-file> <destinationPath>',
 			'checkforupdate' => 'checkforupdate',
@@ -133,6 +146,42 @@ class Dispatcher {
 		return $success;
 	}
 
+	/**
+	 * @param $arguments
+	 * @return bool
+	 */
+	protected function infoCommand($arguments) {
+		if (count($arguments) !== 1 && count($arguments) !== 2) {
+			return $this->helpCommand('info');
+		}
+		$controller = new \etobi\extensionUtils\Controller\TerController();
+		$success = $controller->infoAction(
+			$arguments[0],
+			isset($arguments[1]) ? $arguments[1] : NULL
+		);
+		return $success;
+	}
+
+	/**
+	 * @param array $arguments
+	 */
+	protected function fetchCommand($arguments) {
+		if (count($arguments) !== 2 && count($arguments) !== 3) {
+			return $this->helpCommand('fetch');
+		}
+		$controller = new \etobi\extensionUtils\Controller\TerController();
+		$success = $controller->fetchAction(
+			$arguments[0],
+			$arguments[1],
+			isset($arguments[2]) ? $arguments[2] : NULL
+		);
+		return $success;
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return bool
+	 */
 	protected function extractCommand($arguments) {
 		if (count($arguments) !== 2) {
 			return $this->helpCommand('extract');
