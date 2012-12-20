@@ -5,7 +5,7 @@ namespace etobi\extensionUtils\Controller;
 /**
  *
  */
-class UploadController {
+class TerController {
 
 	const TX_TER_RESULT_EXTENSIONSUCCESSFULLYUPLOADED = 10504;
 

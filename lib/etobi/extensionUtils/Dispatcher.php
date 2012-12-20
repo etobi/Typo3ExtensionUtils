@@ -122,7 +122,7 @@ class Dispatcher {
 			return $this->helpCommand('upload');
 		}
 
-		$controller = new \etobi\extensionUtils\Controller\UploadController();
+		$controller = new \etobi\extensionUtils\Controller\TerController();
 		$success = $controller->uploadAction(
 			$arguments[0],
 			$arguments[1],
