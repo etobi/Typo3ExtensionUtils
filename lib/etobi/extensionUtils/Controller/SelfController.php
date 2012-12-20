@@ -94,6 +94,6 @@ class SelfController {
 	 * @return bool|string
 	 */
 	protected function getPharVersion() {
-		return file_get_contents($this->pharVersionUrl);
+		return @file_get_contents($this->pharVersionUrl);
 	}
 }
