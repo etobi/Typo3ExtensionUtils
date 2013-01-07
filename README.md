@@ -13,7 +13,10 @@ TYPO3 CMS core isn't needed at all for this utilities.
 
 ## Features
 
+* √ "check for updates" and "selfupdate"
 * √ Upload an extension by given path to the TER (TYPO3 Extension Repository)
+* √ display extension and version informations from TER
+* √ download an extension from TER as t3x
 * (coming) Delete an extension in a certain version from TER
 * (coming) Update the MD5 sums in ext_emconf.php
 * √ Extract extension from a .t3x file
@@ -46,3 +49,20 @@ Example:
 
 	./bin/t3xutils.phar eTobi.de 'mySecretPassword' foobar "Minor Bugfixes and cleanup" /var/www/foobar/typo3conf/ext/foobar/
 
+
+### Display TER informations about an extension
+
+	# fetch and cache TER extension metadata
+	./bin/t3xutils.phar updateinfo
+
+	# Display available versions of EXT:foobar
+	./bin/t3xutils.phar info foobar
+
+	# Display metadata of EXT:foobar, version 1.2.3
+	./bin/t3xutils.phar info foobar 1.2.3
+
+
+### Fetch extension from TER
+
+	# download EXT:foobar in version 1.2.3 as .t3x file from TER
+	./bin/t3xutils.phar fetch foobar 1.2.3
