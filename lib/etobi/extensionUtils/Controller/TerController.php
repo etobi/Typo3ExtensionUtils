@@ -36,10 +36,10 @@ class TerController {
 	}
 
 	/**
-	 *
+	 * @param string $extensionKey
+	 * @param string $version
 	 */
 	public function infoAction($extensionKey, $version = NULL) {
-		echo (time() - filemtime($this->extensionsXmlFile));
 		if (!file_exists($this->extensionsXmlFile) || (time() - filemtime($this->extensionsXmlFile)) > 3600) {
 			$this->updateAction();
 		}

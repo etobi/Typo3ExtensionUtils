@@ -49,7 +49,7 @@ class Dispatcher {
 			case 'upload':
 				$success = $this->uploadCommand($arguments);
 				break;
-			case 'updateInfo':
+			case 'updateinfo':
 				$controller = new \etobi\extensionUtils\Controller\TerController();
 				$success = $controller->updateAction();
 				break;
@@ -92,7 +92,7 @@ class Dispatcher {
 		$usages = array(
 			'help' => 'help',
 			'version' => 'version',
-			'updateInfo' => 'updateInfo',
+			'updateinfo' => 'updateinfo',
 			'info' => 'info <extensionKey> [<version]',
 			'fetch' => 'fetch <extensionKey> <version> [<destinationPath>]',
 			'upload' => 'upload <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>',
