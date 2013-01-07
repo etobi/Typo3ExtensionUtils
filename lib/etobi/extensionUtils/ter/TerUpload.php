@@ -108,6 +108,9 @@ class TerUpload {
 		return $response;
 	}
 
+	/**
+	 * @throws \Exception
+	 */
 	protected function checkRequirements() {
 		if (empty($this->username) || empty($this->password)) {
 			throw new \Exception('typo3.org credentials missing.');
@@ -178,9 +181,11 @@ class TerUpload {
 
 	/**
 	 * @return array
+	 * @throws \Exception
 	 */
 	protected function getEmConf() {
 		if ($this->emConf === NULL) {
+			$EM_CONF = array();
 			$_EXTKEY = $this->extensionKey;
 			require $this->path . '/' . 'ext_emconf.php';
 			$this->emConf = $EM_CONF[$_EXTKEY];
@@ -256,7 +261,7 @@ class TerUpload {
 
 		$filesData = array();
 		foreach ($fileArr as $filePath) {
-			$fileName = basename($filePath);
+			$fileName = substr($filePath, strlen($this->path));
 			if ($fileName != 'ext_emconf.php') { // This file should be dynamically written...
 				$content = file_get_contents($filePath);
 				$filesData[] = array(
