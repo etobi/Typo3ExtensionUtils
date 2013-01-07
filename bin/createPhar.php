@@ -26,6 +26,7 @@ try {
 <?php
 Phar::mapPhar("t3xutils.phar");
 define("T3XUTILS_VERSION", "' . $sha1 . '");
+define("T3XUTILS_TIMESTAMP", "' . date('c') . '");
 require "phar://t3xutils.phar/bin/t3xutils.php";
 __HALT_COMPILER();
 ?>');

@@ -71,7 +71,7 @@ class Dispatcher {
 			case 'version':
 				$success = TRUE;
 				if (@constant('T3XUTILS_VERSION')) {
-					echo 'Version: ' . constant('T3XUTILS_VERSION') . chr(10);
+					echo 'Version: ' . constant('T3XUTILS_VERSION') . ' ' . constant('T3XUTILS_TIMESTAMP') . chr(10);
 				} else {
 					echo 'Version: ?' . chr(10);
 				}
