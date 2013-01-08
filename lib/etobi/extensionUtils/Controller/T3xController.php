@@ -15,6 +15,9 @@ class T3xController {
 	public function extractAction($t3xFilePath, $destinationPath) {
 		$destinationPath = str_replace('//', '/', $destinationPath . '/');
 
+		if (!is_dir($destinationPath)) {
+			mkdir($destinationPath, 0777, TRUE);
+		}
 		if (!is_dir($destinationPath) || !is_writeable($destinationPath)) {
 			throw new \Exception('Cant write to "' . $destinationPath . '"');
 		}
