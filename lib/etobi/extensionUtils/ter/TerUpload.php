@@ -121,8 +121,8 @@ class TerUpload {
 		if (empty($this->uploadComment)) {
 			throw new \Exception('upload comment missing.');
 		}
-		if (!is_dir($this->path) || !is_readable($this->path . '/' . 'ext_emconf.php')) {
-			throw new \Exception('Cant read "' . $this->path . '/' . 'ext_emconf.php' . '"');
+		if (!is_dir($this->path) || !is_readable($this->path . 'ext_emconf.php')) {
+			throw new \Exception('Cant read "' . $this->path . 'ext_emconf.php' . '"');
 		}
 	}
 
@@ -187,7 +187,7 @@ class TerUpload {
 		if ($this->emConf === NULL) {
 			$EM_CONF = array();
 			$_EXTKEY = $this->extensionKey;
-			require $this->path . '/' . 'ext_emconf.php';
+			require $this->path . 'ext_emconf.php';
 			$this->emConf = $EM_CONF[$_EXTKEY];
 			if (empty($this->emConf['title']) || empty($this->emConf['version'])) {
 				throw new \Exception('Invalid $EM_CONF');
@@ -314,7 +314,7 @@ class TerUpload {
 	 * @return TerUpload
 	 */
 	public function setPath($path) {
-		$this->path = $path;
+		$this->path = rtrim($path, '/ ') . '/';
 		return $this;
 	}
 
