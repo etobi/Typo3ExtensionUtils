@@ -6,6 +6,45 @@ namespace etobi\extensionUtils\Controller;
  *
  */
 class T3xController {
+	public function createAction($extensionKey, $sourcePath, $t3xFilePath) {
+		$sourcePath = rtrim($sourcePath, '/') . '/';
+
+		if (!is_dir($sourcePath)) {
+			throw new \Exception('Cant read "' . $sourcePath . '"');
+		}
+		if (!file_exists($sourcePath . 'ext_emconf.php')) {
+			throw new \Exception('ext_emconf.php missing in "' . $sourcePath . '"');
+		}
+		if (file_exists($t3xFilePath)) {
+			throw new \Exception('File already exists "' . $t3xFilePath . '"');
+		}
+		if (!is_writable(dirname($t3xFilePath))) {
+			throw new \Exception('Cant write "' . $t3xFilePath . '"');
+		}
+
+		$extensionData = array(
+			'extKey' => $extensionKey,
+			'EM_CONF' => \etobi\extensionUtils\ter\Helper::getEmConf($extensionKey, $sourcePath),
+			'misc' => array(),
+			'techInfo' => array(),
+			'FILES' => \etobi\extensionUtils\ter\Helper::getExtensionFilesData($sourcePath)
+		);
+		$data = serialize($extensionData);
+		$md5 = md5($data);
+		$compress = '';
+		if (function_exists('gzcompress')) {
+			$compress = 'gzcompress';
+			$data = gzcompress($data);
+		}
+		$success = file_put_contents(
+			$t3xFilePath,
+				$md5 . ':' . $compress . ':' . $data
+		);
+		if ($success === FALSE) {
+			throw new \Exception('Error writing "' . $t3xFilePath . '"');
+		}
+		echo 'created "' . $t3xFilePath . '"' . chr(10);
+	}
 
 	/**
 	 * @param string $t3xFilePath

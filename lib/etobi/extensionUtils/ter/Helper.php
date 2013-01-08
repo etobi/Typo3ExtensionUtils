@@ -154,4 +154,60 @@ class Helper {
 		}
 		return $dirs;
 	}
+
+	public static function getEmConf($extensionKey, $path) {
+		$EM_CONF = array();
+		$_EXTKEY = $extensionKey;
+		require $path . 'ext_emconf.php';
+		$emConf = $EM_CONF[$_EXTKEY];
+		if (empty($emConf['title']) || empty($emConf['version'])) {
+			throw new \Exception('Invalid $EM_CONF');
+		}
+		return $emConf;
+	}
+
+	/**
+	 * @param $path
+	 * @param string $excludeForPackaging
+	 * @param int $maxUploadSize
+	 * @return array
+	 * @throws \Exception
+	 */
+	public static function getExtensionFilesData($path, $excludeForPackaging = '(CVS|\..*|.*~|.*\.bak)', $maxUploadSize = 31457280) {
+		$path = rtrim($path, '/') . '/';
+
+		if (!is_dir($path) || !is_readable($path)) {
+			throw new \Exception('Cant read "' . $path .'"');
+		}
+
+		$fileArr = array();
+		$fileArr = self::getAllFilesAndFoldersInPath($fileArr, $path, '', 0, 99, $excludeForPackaging);
+
+		$totalSize = 0;
+		foreach ($fileArr as $filePath) {
+			$totalSize += filesize($filePath);
+		}
+
+		if ($totalSize >= $maxUploadSize) {
+			throw new \Exception('Maximum upload size exceeded (' . $maxUploadSize . ').');
+		}
+
+		$filesData = array();
+		foreach ($fileArr as $filePath) {
+			$fileName = substr($filePath, strlen($path));
+			if ($fileName != 'ext_emconf.php') { // This file should be dynamically written...
+				$content = file_get_contents($filePath);
+				$filesData[utf8_encode($fileName)] = array(
+					'name' => utf8_encode($fileName),
+					'size' => intval(filesize($filePath)),
+					'modificationTime' => intval(filemtime($filePath)),
+					'isExecutable' => intval(is_executable($filePath)),
+					'content' => $content,
+					'contentMD5' => md5($content),
+					'content_md5' => md5($content),
+				);
+			}
+		}
+		return $filesData;
+	}
 }

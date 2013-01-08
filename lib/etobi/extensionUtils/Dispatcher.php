@@ -59,6 +59,9 @@ class Dispatcher {
 			case 'fetch':
 				$success = $this->fetchCommand($arguments);
 				break;
+			case 'create':
+				$success = $this->createCommand($arguments);
+				break;
 			case 'extract':
 				$success = $this->extractCommand($arguments);
 				break;
@@ -97,6 +100,7 @@ class Dispatcher {
 			'fetch' => 'fetch <extensionKey> <version> [<destinationPath>]',
 			'upload' => 'upload <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>',
 			'extract' => 'extract <t3x-file> <destinationPath>',
+			'create' => 'create <extensionKey> <sourcePath> <t3x-file>',
 			'checkforupdate' => 'checkforupdate',
 			'selfupdate' => 'selfupdate'
 		);
@@ -178,6 +182,23 @@ class Dispatcher {
 		return $success;
 	}
 
+	/**
+	 * @param array $arguments
+	 * @return bool
+	 */
+	protected function createCommand($arguments) {
+		if (count($arguments) !== 3) {
+			return $this->helpCommand('create');
+		}
+
+		$controller = new \etobi\extensionUtils\Controller\T3xController();
+		$success = $controller->createAction(
+			$arguments[0],
+			$arguments[1],
+			$arguments[2]
+		);
+		return $success;
+	}
 	/**
 	 * @param array $arguments
 	 * @return bool

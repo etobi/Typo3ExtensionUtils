@@ -74,20 +74,10 @@ class TerUpload {
 	protected $emConf;
 
 	/**
-	 * @var int
-	 */
-	protected $maxUploadSize = 31457280;
-
-	/**
-	 * @var string
-	 */
-	protected $excludeForPackaging = '(CVS|\..*|.*~|.*\.bak)';
-
-
-	/**
 	 *
 	 */
 	public function execute() {
+		var_dump(Helper::getExtensionFilesData($this->path)); die();
 		$this->checkRequirements();
 		$soap = new Soap();
 		$soap->init(array(
@@ -102,7 +92,7 @@ class TerUpload {
 			array(
 				'accountData' => $this->getAccountData(),
 				'extensionData' => $this->getExtensionData(),
-				'filesData' => $this->getFilesData()
+				'filesData' => Helper::getExtensionFilesData($this->path)
 			)
 		);
 		return $response;
@@ -185,13 +175,7 @@ class TerUpload {
 	 */
 	protected function getEmConf() {
 		if ($this->emConf === NULL) {
-			$EM_CONF = array();
-			$_EXTKEY = $this->extensionKey;
-			require $this->path . 'ext_emconf.php';
-			$this->emConf = $EM_CONF[$_EXTKEY];
-			if (empty($this->emConf['title']) || empty($this->emConf['version'])) {
-				throw new \Exception('Invalid $EM_CONF');
-			}
+			$this->emConf = Helper::getEmConf($this->extensionKey, $this->path);
 		}
 		return $this->emConf;
 	}
@@ -243,41 +227,6 @@ class TerUpload {
 		// END for Bug #5919
 
 		return $dependenciesArr;
-	}
-
-	/**
-	 * @return array
-	 * @throws \Exception
-	 */
-	protected function getFilesData() {
-		$fileArr = array();
-		$fileArr = Helper::getAllFilesAndFoldersInPath($fileArr, $this->path, '', 0, 99, $this->excludeForPackaging);
-
-		$totalSize = 0;
-		foreach ($fileArr as $filePath) {
-			$totalSize += filesize($filePath);
-		}
-
-		if ($totalSize >= $this->maxUploadSize) {
-			throw new \Exception('Maximum upload size exceeded (' . $this->maxUploadSize . ').');
-		}
-
-		$filesData = array();
-		foreach ($fileArr as $filePath) {
-			$fileName = substr($filePath, strlen($this->path));
-			if ($fileName != 'ext_emconf.php') { // This file should be dynamically written...
-				$content = file_get_contents($filePath);
-				$filesData[] = array(
-					'name' => utf8_encode($fileName),
-					'size' => intval(filesize($filePath)),
-					'modificationTime' => intval(filemtime($filePath)),
-					'isExecutable' => intval(is_executable($filePath)),
-					'content' => $content,
-					'contentMD5' => md5($content),
-				);
-			}
-		}
-		return $filesData;
 	}
 
 	/**
