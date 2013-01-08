@@ -75,7 +75,11 @@ $EM_CONF[$_EXTKEY] = ' . var_export($emConf, TRUE) . ';
 				throw new \Exception('MD5 hash of "' . $info['name'] . '" doesnt match');
 			} else {
 				$fileHandler = fopen($fullFilePath, 'wb');
-				$res = fwrite($fileHandler, $info['content']);
+				if (empty($info['content'])) {
+					$res = TRUE;
+				} else {
+					$res = fwrite($fileHandler, $info['content']);
+				}
 				fclose($fileHandler);
 				if (!$res) {
 					throw new \Exception('Cant write file "' . $fullFilePath . '"');
