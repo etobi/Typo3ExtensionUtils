@@ -24,6 +24,9 @@ class T3xController {
 		if (file_exists($destinationPath . 'ext_emconf.php')) {
 			throw new \Exception('Destination directory is not empty "' . $destinationPath . '"');
 		}
+		if (!file_exists($t3xFilePath) || !is_file($t3xFilePath) || !is_readable($t3xFilePath)) {
+			throw new \Exception('Cant read "' . $t3xFilePath . '"');
+		}
 
 		$extensionData = $this->extractExtensionDataFromT3x($t3xFilePath);
 		$this->writeFiles($extensionData['FILES'], $destinationPath);
