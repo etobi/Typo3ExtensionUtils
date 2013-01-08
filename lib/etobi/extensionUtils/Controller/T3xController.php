@@ -13,7 +13,7 @@ class T3xController {
 	 * @throws \Exception
 	 */
 	public function extractAction($t3xFilePath, $destinationPath) {
-		$destinationPath = str_replace('//', '/', $destinationPath . '/');
+		$destinationPath = rtrim($destinationPath, '/') . '/';
 
 		if (!is_dir($destinationPath)) {
 			mkdir($destinationPath, 0777, TRUE);
