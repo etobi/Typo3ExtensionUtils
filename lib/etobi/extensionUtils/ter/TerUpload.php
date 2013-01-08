@@ -201,30 +201,33 @@ class TerUpload {
 	 */
 	protected function getDependenciesArray() {
 		$emConf = $this->getEmConf();
-		$extKeysArr = $emConf['constraints']['depends'];
 		$dependenciesArr = array();
 
-		if (is_array($extKeysArr)) {
-			foreach ($extKeysArr as $extKey => $version) {
-				if (strlen($extKey)) {
-					$dependenciesArr[] = array(
-						'kind' => 'depends',
-						'extensionKey' => utf8_encode($extKey),
-						'versionRange' => utf8_encode($version),
-					);
+		if (isset($emConf['constraints']) && is_array($emConf['constraints'])) {
+			$extKeysArr = $emConf['constraints']['depends'];
+
+			if (is_array($extKeysArr)) {
+				foreach ($extKeysArr as $extKey => $version) {
+					if (strlen($extKey)) {
+						$dependenciesArr[] = array(
+							'kind' => 'depends',
+							'extensionKey' => utf8_encode($extKey),
+							'versionRange' => utf8_encode($version),
+						);
+					}
 				}
 			}
-		}
 
-		$extKeysArr = $emConf['constraints']['conflicts'];
-		if (is_array($extKeysArr)) {
-			foreach ($extKeysArr as $extKey => $version) {
-				if (strlen($extKey)) {
-					$dependenciesArr[] = array(
-						'kind' => 'conflicts',
-						'extensionKey' => utf8_encode($extKey),
-						'versionRange' => utf8_encode($version),
-					);
+			$extKeysArr = $emConf['constraints']['conflicts'];
+			if (is_array($extKeysArr)) {
+				foreach ($extKeysArr as $extKey => $version) {
+					if (strlen($extKey)) {
+						$dependenciesArr[] = array(
+							'kind' => 'conflicts',
+							'extensionKey' => utf8_encode($extKey),
+							'versionRange' => utf8_encode($version),
+						);
+					}
 				}
 			}
 		}
