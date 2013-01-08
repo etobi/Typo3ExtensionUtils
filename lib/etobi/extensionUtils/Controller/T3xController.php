@@ -28,6 +28,7 @@ class T3xController {
 		$extensionData = $this->extractExtensionDataFromT3x($t3xFilePath);
 		$this->writeFiles($extensionData['FILES'], $destinationPath);
 		$this->writeEmConf($extensionData['extKey'], $extensionData['EM_CONF'], $destinationPath);
+		echo 'extracted "' . $t3xFilePath . '" to "' . $destinationPath . '"' . chr(10);
 	}
 
 	/**
