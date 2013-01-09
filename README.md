@@ -20,7 +20,7 @@ TYPO3 CMS core isn't needed at all for this utilities.
 * (coming) Delete an extension in a certain version from TER
 * (coming) Update the MD5 sums in ext_emconf.php
 * √ Extract extension from a .t3x file
-* (coming) Create a .t3x from a extension path
+* √ Create a .t3x from a extension path
 
 
 ### Help
@@ -43,11 +43,11 @@ Usage:
 
 Usage:
 
-	./bin/t3xutils.phar <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>
+	./bin/t3xutils.phar upload <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>
 
 Example:
 
-	./bin/t3xutils.phar eTobi.de 'mySecretPassword' foobar "Minor Bugfixes and cleanup" /var/www/foobar/typo3conf/ext/foobar/
+	./bin/t3xutils.phar upload eTobi.de 'mySecretPassword' foobar "Minor Bugfixes and cleanup" /var/www/foobar/typo3conf/ext/foobar/
 
 
 ### Display TER informations about an extension
@@ -66,3 +66,16 @@ Example:
 
 	# download EXT:foobar in version 1.2.3 as .t3x file from TER
 	./bin/t3xutils.phar fetch foobar 1.2.3
+
+
+### Extract a .t3x file
+
+	# extract the file 'foobar_1.2.3.t3x' into 'typo3conf/ext/foobar/'
+	./bin/t3xutils.phar extract foobar_1.2.3.t3x typo3conf/ext/foobar/
+
+
+### Create a .t3x file
+
+	# create a 'foobar.t3x' file for the EXT:foobar from the content of 'typo3conf/ext/foobar'
+	./bin/t3xutils.phar create foobar typo3conf/ext/foobar foobar.t3x
+
