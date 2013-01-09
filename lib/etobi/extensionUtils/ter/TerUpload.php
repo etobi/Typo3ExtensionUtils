@@ -77,7 +77,6 @@ class TerUpload {
 	 *
 	 */
 	public function execute() {
-		var_dump(Helper::getExtensionFilesData($this->path)); die();
 		$this->checkRequirements();
 		$soap = new Soap();
 		$soap->init(array(
