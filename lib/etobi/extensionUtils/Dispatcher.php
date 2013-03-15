@@ -97,7 +97,7 @@ class Dispatcher {
 			'version' => 'version',
 			'updateinfo' => 'updateinfo',
 			'info' => 'info <extensionKey> [<version]',
-			'fetch' => 'fetch <extensionKey> <version> [<destinationPath>]',
+			'fetch' => 'fetch <extensionKey> [<version>] [<destinationPath>]',
 			'upload' => 'upload <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>',
 			'extract' => 'extract <t3x-file> <destinationPath>',
 			'create' => 'create <extensionKey> <sourcePath> <t3x-file>',
@@ -170,13 +170,13 @@ class Dispatcher {
 	 * @param array $arguments
 	 */
 	protected function fetchCommand($arguments) {
-		if (count($arguments) !== 2 && count($arguments) !== 3) {
+		if (count($arguments) !== 1 && count($arguments) !== 2 && count($arguments) !== 3) {
 			return $this->helpCommand('fetch');
 		}
 		$controller = new \etobi\extensionUtils\Controller\TerController();
 		$success = $controller->fetchAction(
 			$arguments[0],
-			$arguments[1],
+			isset($arguments[1]) ? $arguments[1] : NULL,
 			isset($arguments[2]) ? $arguments[2] : NULL
 		);
 		return $success;

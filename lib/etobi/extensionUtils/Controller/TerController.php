@@ -19,7 +19,28 @@ class TerController {
 	 * @param $version
 	 * @param string $destinationPath
 	 */
-	public function fetchAction($extensionKey, $version, $destinationPath = NULL) {
+	public function fetchAction($extensionKey, $version = NULL, $destinationPath = NULL) {
+		// Find latest version
+		if ($version === NULL) {
+			$result = $this->queryExtensionsXML(
+				'/extensions/extension[@extensionkey="' . $extensionKey . '"]'
+			);
+			$max = -1;
+			foreach ($result->item(0)->childNodes as $versionNode) {
+				if ($versionNode->nodeName == 'version' && $versionNode->hasAttribute('version')) {
+					$date = $versionNode->getElementsByTagName('lastuploaddate')->item(0)->nodeValue;
+					if($date > $max) {
+						$max = $date;
+						$version = $versionNode->getAttribute('version');
+					}
+				}
+			}
+			if (!$version) {
+				echo 'could not find latest version of ' . $extensionKey . chr(10);
+			} else {
+				echo 'fetching latest version of ' . $extensionKey . ', ' . $version . chr(10);
+			}
+		}
 		$t3xFile = $extensionKey . '_' . $version . '.t3x';
 		$url = 'http://typo3.org/fileadmin/ter/' . $extensionKey{0} . '/' . $extensionKey{1} . '/' . $t3xFile;
 		exec('wget "' . $url . '" -O ' . ($destinationPath ?: '.') . '/' . $t3xFile);
@@ -40,14 +61,7 @@ class TerController {
 	 * @param string $version
 	 */
 	public function infoAction($extensionKey, $version = NULL) {
-		if (!file_exists($this->extensionsXmlFile) || (time() - filemtime($this->extensionsXmlFile)) > 3600) {
-			$this->updateAction();
-		}
-
-		$doc = new \DOMDocument();
-		$doc->loadXML(file_get_contents($this->extensionsXmlFile));
-		$xpath = new \DOMXpath($doc);
-		$result = $xpath->query(
+		$result = $this->queryExtensionsXML(
 			'/extensions/extension[@extensionkey="' . $extensionKey . '"]' .
 				($version ? '/version[@version="' . $version . '"]' : '')
 		);
@@ -135,5 +149,24 @@ class TerController {
 			return TRUE;
 		}
 		return FALSE;
+	}
+
+	/**
+	 * queryExtensionsXML
+	 *
+	 * query extension xml
+	 *
+	 * @param $query xpath query
+	 * @returns DOMNodeList
+	 */
+	protected function queryExtensionsXML($query) {
+		if (!file_exists($this->extensionsXmlFile) || (time() - filemtime($this->extensionsXmlFile)) > 3600) {
+			$this->updateAction();
+		}
+
+		$doc = new \DOMDocument();
+		$doc->loadXML(file_get_contents($this->extensionsXmlFile));
+		$xpath = new \DOMXpath($doc);
+		return $xpath->query($query);
 	}
 }
