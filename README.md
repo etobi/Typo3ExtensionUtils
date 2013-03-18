@@ -4,10 +4,16 @@ This is (or should get) a collection of CLI utilities for TYPO3 CMS Extension. G
 while developing extensions from the cli. All tools work without a fully functional TYPO3 installation. Actually the
 TYPO3 CMS core isn't needed at all for this utilities.
 
-
-## Installation
+## Installation with wget
 
 	wget http://bit.ly/t3xutils -O t3xutils.phar
+	chmod +x t3xutils.phar
+	./t3xutils.phar help
+
+## Installation with git
+
+	git clone https://github.com/etobi/Typo3ExtensionUtils.git
+	cd Typo3ExtensionUtils/bin/
 	chmod +x t3xutils.phar
 	./t3xutils.phar help
 
@@ -27,55 +33,55 @@ TYPO3 CMS core isn't needed at all for this utilities.
 
 Usage:
 
-	./bin/t3xutils.phar help
+	./t3xutils.phar help
 
 
 ### Self-update
 
 	# check if a new version is available
-	./bin/t3xutils.phar checkforupdate
+	./t3xutils.phar checkforupdate
 
 	# download and install the new version
-	./bin/t3xutils.phar selfupdate
+	./t3xutils.phar selfupdate
 
 
 ### Upload Extension to TER
 
 Usage:
 
-	./bin/t3xutils.phar upload <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>
+	./t3xutils.phar upload <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>
 
 Example:
 
-	./bin/t3xutils.phar upload eTobi.de 'mySecretPassword' foobar "Minor Bugfixes and cleanup" /var/www/foobar/typo3conf/ext/foobar/
+	./t3xutils.phar upload eTobi.de 'mySecretPassword' foobar "Minor Bugfixes and cleanup" /var/www/foobar/typo3conf/ext/foobar/
 
 
 ### Display TER informations about an extension
 
 	# fetch and cache TER extension metadata
-	./bin/t3xutils.phar updateinfo
+	./t3xutils.phar updateinfo
 
 	# Display available versions of EXT:foobar
-	./bin/t3xutils.phar info foobar
+	./t3xutils.phar info foobar
 
 	# Display metadata of EXT:foobar, version 1.2.3
-	./bin/t3xutils.phar info foobar 1.2.3
+	./t3xutils.phar info foobar 1.2.3
 
 
 ### Fetch extension from TER
 
 	# download EXT:foobar in version 1.2.3 as .t3x file from TER
-	./bin/t3xutils.phar fetch foobar 1.2.3
+	./t3xutils.phar fetch foobar 1.2.3
 
 
 ### Extract a .t3x file
 
 	# extract the file 'foobar_1.2.3.t3x' into 'typo3conf/ext/foobar/'
-	./bin/t3xutils.phar extract foobar_1.2.3.t3x typo3conf/ext/foobar/
+	./t3xutils.phar extract foobar_1.2.3.t3x typo3conf/ext/foobar/
 
 
 ### Create a .t3x file
 
 	# create a 'foobar.t3x' file for the EXT:foobar from the content of 'typo3conf/ext/foobar'
-	./bin/t3xutils.phar create foobar typo3conf/ext/foobar foobar.t3x
+	./t3xutils.phar create foobar typo3conf/ext/foobar foobar.t3x
 
