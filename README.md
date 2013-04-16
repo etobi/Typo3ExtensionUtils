@@ -25,6 +25,7 @@ TYPO3 CMS core isn't needed at all for this utilities.
 * √ download an extension from TER as t3x
 * (coming) Delete an extension in a certain version from TER
 * (coming) Update the MD5 sums in ext_emconf.php
+* (coming) Check extension files against MD5 sums to find modified files
 * √ Extract extension from a .t3x file
 * √ Create a .t3x from a extension path
 
