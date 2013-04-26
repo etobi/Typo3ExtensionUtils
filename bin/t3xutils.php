@@ -1,15 +1,21 @@
 <?php
 
+use etobi\extensionUtils\Command as Command;
+
 require(__DIR__ . '/../lib/autoload.php');
 \etobi\extensionUtils\register_autoload();
 
-try {
-	$dispatcher = new \etobi\extensionUtils\Dispatcher();
-
-	$arguments = array_splice($_SERVER['argv'], 1);
-	$dispatcher->setCommandCalled($_SERVER['argv'][0]);
-	$dispatcher->setArguments($arguments);
-	$dispatcher->run();
-} catch(\Exception $e) {
-	echo 'Exception: '. $e->getMessage() . chr(10);
-}
+$console = new \Symfony\Component\Console\Application();
+$console->setName('t3xutils');
+$console->setVersion(defined('T3XUTILS_VERSION') ? constant('T3XUTILS_VERSION') : '?');
+$console->addCommands(array(
+    new Command\CheckForUpdateCommand(),
+    new Command\CreateCommand(),
+    new Command\ExtractCommand(),
+    new Command\FetchCommand(),
+    new Command\InfoCommand(),
+    new Command\SelfUpdateCommand(),
+    new Command\UpdateInfoCommand(),
+    new Command\UploadCommand(),
+));
+$console->run();
