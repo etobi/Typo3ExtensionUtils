@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
 
 /**
  * UpdateInfoCommand updates the extension information
@@ -37,7 +38,9 @@ class UpdateInfoCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $logger = new ConsoleOutputLoggerProxy($output);
         $controller = new TerController();
+        $controller->setLogger($logger);
         $success = $controller->updateAction();
 
         return $success ? 0 : 1;

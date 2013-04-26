@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
 
 /**
  * CreateCommand creates a T3X file
@@ -41,7 +42,9 @@ class CreateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $logger = new ConsoleOutputLoggerProxy($output);
         $controller = new T3xController();
+        $controller->setLogger($logger);
         $controller->createAction(
             $input->getArgument('extensionKey'),
             $input->getArgument('sourcePath'),

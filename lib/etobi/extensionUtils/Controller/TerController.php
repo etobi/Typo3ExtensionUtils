@@ -5,7 +5,7 @@ namespace etobi\extensionUtils\Controller;
 /**
  *
  */
-class TerController {
+class TerController extends AbstractController {
 
 	const TX_TER_RESULT_EXTENSIONSUCCESSFULLYUPLOADED = 10504;
 
@@ -35,11 +35,13 @@ class TerController {
 					}
 				}
 			}
-			if (!$version) {
-				echo 'could not find latest version of ' . $extensionKey . chr(10);
-			} else {
-				echo 'fetching latest version of ' . $extensionKey . ', ' . $version . chr(10);
-			}
+            if($this->logger) {
+                if (!$version) {
+                    $this->logger->warning('could not find latest version of ' . $extensionKey);
+                } else {
+                    $this->logger->notice('fetching latest version of ' . $extensionKey . ', ' . $version);
+                }
+            }
 		}
 		$t3xFile = $extensionKey . '_' . $version . '.t3x';
 		$url = 'http://typo3.org/fileadmin/ter/' . $extensionKey{0} . '/' . $extensionKey{1} . '/' . $t3xFile;
@@ -51,7 +53,9 @@ class TerController {
 	 */
 	public function updateAction() {
 		 // TODO
-		echo 'fetch extension info ...' . chr(10);
+        if($this->logger) {
+            $this->logger->info('fetch extension info ...');
+        }
 		$url = 'http://typo3.org/fileadmin/ter/extensions.xml.gz';
 		exec('wget "' . $url . '" -q -O - | gunzip > ' . $this->extensionsXmlFile);
 	}
@@ -74,18 +78,22 @@ class TerController {
 				}
 			}
 
-			echo 'Extension: ' . $extensionKey . ' ' . $version;
+            if($this->logger) {
+                $this->logger->notice('Extension: ' . $extensionKey . ' ' . $version);
+            }
 			foreach ($infos as $key => $info) {
 				if ($key === 'lastuploaddate') {
 					$info = date('d.m.Y H:i:s', $info);
 				} else if ($key === 'dependencies') {
 					$info = var_export(unserialize($info), TRUE);
 				}
-				echo ' ' .
+                if($this->logger) {
+                    $this->logger->notice(' ' .
 						str_pad($key, 15, ' ', STR_PAD_RIGHT) .
 						'    ' .
-						$info .
-						chr(10);
+						$info
+                    );
+                }
 			}
 
 		} else {
@@ -101,16 +109,20 @@ class TerController {
 				}
 			}
 
-			echo 'Available versions:' . chr(10);
-			foreach($versionInfos as $versionInfo) {
-				echo ' ' .
-						$versionInfo['version'] .
-						'    uploaded: ' .
-						date('d.m.Y H:i:s', $versionInfo['timestamp']) .
-						// chr(10) .
-						// $versionInfo['comment'] .
-						chr(10);
-			}
+            if($this->logger) {
+                $this->logger->notice('Available versions:');
+                foreach($versionInfos as $versionInfo) {
+                    $this->logger->notice(' ' .
+                        $versionInfo['version'] .
+                        '    uploaded: ' .
+                        date('d.m.Y H:i:s', $versionInfo['timestamp'])
+                        // chr(10) .
+                        // $versionInfo['comment']
+                    );
+                }
+            }
+
+
 		}
 	}
 
@@ -133,15 +145,21 @@ class TerController {
 		try {
 			$response = $upload->execute();
 		} catch (\SoapFault $s) {
-			echo 'SOAP-Error: ' . $s->getMessage() . chr(10);
+            if($this->logger) {
+                $this->logger->error('SOAP-Error: ' . $s->getMessage());
+            }
 			return FALSE;
 		} catch(\Exception $e) {
-			echo 'Error: ' . $e->getMessage() . chr(10);
+            if($this->logger) {
+                $this->logger->error('Error: ' . $e->getMessage());
+            }
 			return FALSE;
 		}
 
 		if (!is_array($response)) {
-			echo 'Error: ' . $response . chr(10);
+            if($this->logger) {
+			    $this->logger->error('Error: ' . $response);
+            }
 			return FALSE;
 		}
 		if ($response['resultCode'] == self::TX_TER_RESULT_EXTENSIONSUCCESSFULLYUPLOADED) {

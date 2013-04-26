@@ -5,7 +5,7 @@ namespace etobi\extensionUtils\Controller;
 /**
  *
  */
-class T3xController {
+class T3xController extends AbstractController {
 	public function createAction($extensionKey, $sourcePath, $t3xFilePath) {
 		$sourcePath = rtrim($sourcePath, '/') . '/';
 
@@ -43,7 +43,9 @@ class T3xController {
 		if ($success === FALSE) {
 			throw new \Exception('Error writing "' . $t3xFilePath . '"');
 		}
-		echo 'created "' . $t3xFilePath . '"' . chr(10);
+        if($this->logger) {
+            $this->logger->notice('created "' . $t3xFilePath . '"');
+        }
 	}
 
 	/**
@@ -70,7 +72,9 @@ class T3xController {
 		$extensionData = $this->extractExtensionDataFromT3x($t3xFilePath);
 		$this->writeFiles($extensionData['FILES'], $destinationPath);
 		$this->writeEmConf($extensionData['extKey'], $extensionData['EM_CONF'], $destinationPath);
-		echo 'extracted "' . $t3xFilePath . '" to "' . $destinationPath . '"' . chr(10);
+        if($this->logger) {
+            $this->logger->notice('extracted "' . $t3xFilePath . '" to "' . $destinationPath . '"');
+        }
 	}
 
 	/**

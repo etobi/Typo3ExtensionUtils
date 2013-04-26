@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
 
 /**
  * FetchCommand downloads an extension
@@ -41,7 +42,9 @@ class FetchCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $logger = new ConsoleOutputLoggerProxy($output);
         $controller = new TerController();
+        $controller->setLogger($logger);
         $controller->fetchAction(
             $input->getArgument('extensionKey'),
             $input->hasArgument('version') ? $input->getArgument('version') : NULL,

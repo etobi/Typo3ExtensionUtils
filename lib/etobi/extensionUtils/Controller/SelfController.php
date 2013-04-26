@@ -5,7 +5,7 @@ namespace etobi\extensionUtils\Controller;
 /**
  *
  */
-class SelfController {
+class SelfController extends AbstractController {
 
 	/**
 	 * @var string
@@ -38,9 +38,10 @@ class SelfController {
 	public function checkForUpdateAction() {
 		$sha1 = $this->getPharVersion();
 		if ($sha1 && $sha1 !== @constant('T3XUTILS_VERSION')) {
-			echo 'You\'re using a different version then the latest available on github. Consider updating using the "selfupdate" command.' . chr(10);
-			echo 'Visit ' . $this->homepage . ' for more information.' . chr(10);
-			echo chr(10);
+            if($this->logger) {
+                $this->logger->notice('You\'re using a different version then the latest available on github. Consider updating using the "selfupdate" command.');
+                $this->logger->notice('Visit ' . $this->homepage . ' for more information.');
+            }
 			return FALSE;
 		} else {
 			return TRUE;
@@ -59,21 +60,29 @@ class SelfController {
 			$sha1 = $this->getPharVersion();
 			if ($sha1 && $sha1 !== @constant('T3XUTILS_VERSION')) {
 				try {
-					echo 'download ' . $this->pharDownloadUrl . ' ...' . chr(10);
+                    if($this->logger) {
+					    $this->logger->info('download ' . $this->pharDownloadUrl . ' ...');
+                    }
 					$downloadCommand = 'wget -q ' . $this->pharDownloadUrl . ' -O ' . $tempFilename;
 					exec($downloadCommand);
 					chmod($tempFilename, 0777 & ~umask());
 
-					echo 'check download ' . ' ...' . chr(10);
+                    if($this->logger) {
+					    $this->logger->info('check download ' . ' ...');
+                    }
 					$testPhar = new \Phar($tempFilename);
 					unset($testPhar);
 
-					echo 'install to ' . $localFilename . ' ...' . chr(10);
+                    if($this->logger) {
+                        $this->logger->info('install to ' . $localFilename . ' ...');
+                    }
 					@unlink($backupFilename);
 					rename($localFilename, $backupFilename);
 					rename($tempFilename, $localFilename);
 
-					echo 'done ("' . $sha1 . '")' . chr(10);
+                    if($this->logger) {
+					    $this->logger->notice('done ("' . $sha1 . '")');
+                    }
 				} catch (\Exception $e) {
 					@unlink($tempFilename);
 					if (!$e instanceof \UnexpectedValueException && !$e instanceof \PharException) {
@@ -82,7 +91,9 @@ class SelfController {
 					throw new \Exception('The download is corrupted ('.$e->getMessage().').');
 				}
 			} else {
-				echo 'already up-to-date.' . chr(10);
+                if($this->logger) {
+				    $this->logger->notice('already up-to-date.');
+                }
 			}
 		} else {
 			throw new \Exception('selfupdate does only work, when running the .phar');

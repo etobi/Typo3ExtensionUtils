@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
 
 /**
  * UploadCommand uploads an extension into TER
@@ -41,7 +42,9 @@ class UploadCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $logger = new ConsoleOutputLoggerProxy($output);
         $controller = new \etobi\extensionUtils\Controller\TerController();
+        $controller->setLogger($logger);
         $success = $controller->uploadAction(
             $input->getArgument('username'),
             $input->getArgument('password'),
