@@ -29,6 +29,7 @@ class InfoCommand extends AbstractCommand
             ->setDefinition(array(
                 new InputArgument('extensionKey', InputArgument::REQUIRED, 'the extension key you want information on'),
                 new InputArgument('version', InputArgument::OPTIONAL, 'get information on an specific version'),
+                new InputOption('latest', 'l', InputOption::VALUE_NONE, 'get information on the latest version if non is specified'),
             ))
             ->setDescription('Get information about an extension')
             //@TODO: longer help text
@@ -43,6 +44,13 @@ class InfoCommand extends AbstractCommand
     {
         $extensionKey = $input->getArgument('extensionKey');
         $version = $input->getArgument('version');
+
+        if(!$version && $input->getOption('latest')) {
+            $extensionsXmlService = new \etobi\extensionUtils\Service\ExtensionsXml();
+            $version = $extensionsXmlService->findLatestVersion($extensionKey);
+            $input->setArgument('version', $version);
+            $this->logger->info(sprintf('Latest version of %s is %s', $extensionKey, $version));
+        }
 
         if($version) {
             return $this->executeVersionInfo($input, $output);
