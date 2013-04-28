@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
+use etobi\extensionUtils\Service\Gzip;
 
 /**
  * UpdateInfoCommand updates the extension information
@@ -50,17 +51,12 @@ class UpdateInfoCommand extends AbstractCommand
 
         $this->logger->info(sprintf('unpacking "%s"...', $extensionsXmlFileGzipped));
 
-        $cmd = sprintf('gzip -df %s > %s', escapeshellarg($extensionsXmlFileGzipped), escapeshellarg($extensionsXmlFile));
-        $this->logger->debug('executing: ' . $cmd);
-        $cmdReturn = system($cmd);
-        if($cmdReturn === FALSE) {
-            $this->logger->critical(sprintf(
-                'Unpacking %s failed.'
-            ));
-            return 1;
-        } else {
+        $gzip = new Gzip();
+        $gzipReturn = $gzip->unzip($extensionsXmlFileGzipped, $extensionsXmlFile);
+        if($gzipReturn) {
             $this->logger->notice('extension info updated');
+        } else {
+            $this->logger->critical('extension info was not updated');
         }
-        return 0;
     }
 }
