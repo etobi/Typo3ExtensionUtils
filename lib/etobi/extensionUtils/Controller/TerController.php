@@ -22,65 +22,7 @@ class TerController extends AbstractController {
 	 * @param string $version
 	 */
 	public function infoAction($extensionKey, $version = NULL) {
-		$result = $this->queryExtensionsXML(
-			'/extensions/extension[@extensionkey="' . $extensionKey . '"]' .
-				($version ? '/version[@version="' . $version . '"]' : '')
-		);
-		if ($version) {
-			$infos = array();
-			foreach ($result->item(0)->childNodes as $childNode) {
-				/** @var $childNode \DOMElement */
-				if ($childNode->nodeType == XML_ELEMENT_NODE) {
-					$infos[$childNode->nodeName] = $childNode->nodeValue;
-				}
-			}
 
-            if($this->logger) {
-                $this->logger->notice('Extension: ' . $extensionKey . ' ' . $version);
-            }
-			foreach ($infos as $key => $info) {
-				if ($key === 'lastuploaddate') {
-					$info = date('d.m.Y H:i:s', $info);
-				} else if ($key === 'dependencies') {
-					$info = var_export(unserialize($info), TRUE);
-				}
-                if($this->logger) {
-                    $this->logger->notice(' ' .
-						str_pad($key, 15, ' ', STR_PAD_RIGHT) .
-						'    ' .
-						$info
-                    );
-                }
-			}
-
-		} else {
-			$versionInfos = array();
-			foreach ($result->item(0)->childNodes as $versionNode) {
-				/** @var $versionNode \DOMElement */
-				if ($versionNode->nodeName == 'version' && $versionNode->hasAttribute('version')) {
-					$versionInfos[] = array(
-						'version' => $versionNode->getAttribute('version'),
-						'comment' => $versionNode->getElementsByTagName('uploadcomment')->item(0)->nodeValue,
-						'timestamp' => $versionNode->getElementsByTagName('lastuploaddate')->item(0)->nodeValue
-					);
-				}
-			}
-
-            if($this->logger) {
-                $this->logger->notice('Available versions:');
-                foreach($versionInfos as $versionInfo) {
-                    $this->logger->notice(' ' .
-                        $versionInfo['version'] .
-                        '    uploaded: ' .
-                        date('d.m.Y H:i:s', $versionInfo['timestamp'])
-                        // chr(10) .
-                        // $versionInfo['comment']
-                    );
-                }
-            }
-
-
-		}
 	}
 
 	/**

@@ -82,4 +82,50 @@ class ExtensionsXml {
         }
         return $version;
     }
+
+    /**
+     * get all available information on an extension key
+     *
+     * @param $extensionKey
+     * @return array
+     */
+    public function getExtensionInfo($extensionKey) {
+        $result = $this->query('/extensions/extension[@extensionkey="' . $extensionKey . '"]');
+
+        $versionInfos = array();
+        foreach ($result->item(0)->childNodes as $versionNode) {
+            /** @var $versionNode \DOMElement */
+            if ($versionNode->nodeName == 'version' && $versionNode->hasAttribute('version')) {
+                $versionInfos[] = array(
+                    'version' => $versionNode->getAttribute('version'),
+                    'comment' => $versionNode->getElementsByTagName('uploadcomment')->item(0)->nodeValue,
+                    'timestamp' => $versionNode->getElementsByTagName('lastuploaddate')->item(0)->nodeValue
+                );
+            }
+        }
+        return $versionInfos;
+    }
+
+    /**
+     * get all available information on a version
+     *
+     * @param string $extensionKey
+     * @param string $version
+     * @return array
+     */
+    public function getVersionInfo($extensionKey, $version) {
+        $result = $this->query(sprintf(
+            '/extensions/extension[@extensionkey="%s"]/version[@version="%s"]',
+            $extensionKey,
+            $version
+        ));
+        $infos = array();
+        foreach ($result->item(0)->childNodes as $childNode) {
+            /** @var $childNode \DOMElement */
+            if ($childNode->nodeType == XML_ELEMENT_NODE) {
+                $infos[$childNode->nodeName] = $childNode->nodeValue;
+            }
+        }
+        return $infos;
+    }
 }

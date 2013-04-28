@@ -41,12 +41,68 @@ class InfoCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $logger = new ConsoleOutputLoggerProxy($output);
-        $controller = new TerController();
-        $controller->setLogger($logger);
-        $controller->infoAction(
-            $input->getArgument('extensionKey'),
-            $input->hasArgument('version') ? $input->getArgument('version') : NULL
-        );
+        $extensionKey = $input->getArgument('extensionKey');
+        $version = $input->getArgument('version');
+
+        if($version) {
+            return $this->executeVersionInfo($input, $output);
+        } else {
+            return $this->executeExtensionInfo($input, $output);
+        }
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return integer
+     */
+    protected function executeExtensionInfo(InputInterface $input, OutputInterface $output) {
+        $extensionKey = $input->getArgument('extensionKey');
+
+        $extensionsXmlService = new \etobi\extensionUtils\Service\ExtensionsXml();
+        $versionInfos = $extensionsXmlService->getExtensionInfo($extensionKey);
+
+        $output->writeln('Available versions:');
+        foreach($versionInfos as $versionInfo) {
+            $output->writeln(' ' .
+                    $versionInfo['version'] .
+                    '    uploaded: ' .
+                    date('d.m.Y H:i:s', $versionInfo['timestamp'])
+            // chr(10) .
+            // $versionInfo['comment']
+            );
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return integer
+     */
+    protected function executeVersionInfo(InputInterface $input, OutputInterface $output) {
+        $extensionKey = $input->getArgument('extensionKey');
+        $version = $input->getArgument('version');
+
+        $extensionsXmlService = new \etobi\extensionUtils\Service\ExtensionsXml();
+        $infos = $extensionsXmlService->getVersionInfo($extensionKey, $version);
+
+        $output->writeln('Extension: ' . $extensionKey . ' ' . $version);
+
+        foreach ($infos as $key => $info) {
+            if ($key === 'lastuploaddate') {
+                $info = date('d.m.Y H:i:s', $info);
+            } else if ($key === 'dependencies') {
+                $info = var_export(unserialize($info), TRUE);
+            }
+            $output->writeln(' ' .
+                    str_pad($key, 15, ' ', STR_PAD_RIGHT) .
+                    '    ' .
+                    $info
+            );
+        }
+
+        return 0;
     }
 }
