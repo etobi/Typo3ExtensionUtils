@@ -41,7 +41,7 @@ class TerUpload {
 	/**
 	 * @var string
 	 */
-	protected $wsdlURL = 'http://typo3.org/wsdl/tx_ter_wsdl.php';
+	protected $wsdlURL = 'http://www.latest.dev.t3o.typo3.org/wsdl/tx_ter_wsdl.php';
 
 	/**
 	 * @var string

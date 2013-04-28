@@ -42,16 +42,33 @@ class UploadCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $logger = new ConsoleOutputLoggerProxy($output);
-        $controller = new \etobi\extensionUtils\Controller\TerController();
-        $controller->setLogger($logger);
-        $success = $controller->uploadAction(
-            $input->getArgument('username'),
-            $input->getArgument('password'),
-            $input->getArgument('extensionKey'),
-            $input->getArgument('uploadComment'),
-            $input->getArgument('pathToExtension')
-        );
-        return $success ? 0 : 1;
+        $upload = new \etobi\extensionUtils\ter\TerUpload();
+        $upload->setExtensionKey($input->getArgument('extensionKey'))
+            ->setUsername($input->getArgument('username'))
+            ->setPassword($input->getArgument('password'))
+            ->setUploadComment($input->getArgument('uploadComment'))
+            ->setPath($input->getArgument('pathToExtension'));
+
+        try {
+            $response = $upload->execute();
+        } catch (\SoapFault $s) {
+            $this->logger->error('SOAP-Error: ' . $s->getMessage());
+            return 1;
+        } catch(\Exception $e) {
+            $this->logger->error('Error: ' . $e->getMessage());
+            return 1;
+        }
+
+        if (!is_array($response)) {
+            $this->logger->error('Error: ' . $response);
+            return 1;
+        }
+        if ($response['resultCode'] == 10504) {
+            if(is_array($response['resultMessages'])) {
+                $output->writeln($response['resultMessages']);
+            }
+            return 0;
+        }
+        return 0;
     }
 }
