@@ -93,41 +93,41 @@ class Soap {
 		}
 	}
 
-	/**
-	 * Login
-	 *
-	 * @param	string		$username
-	 * @param	string		$password
-	 * @return	mixed		false on failure, $reactid on success
-	 */
-	function login($username, $password) {
-		$reactid = $this->call('login', array('username' => $username, 'password' => $password));
-
-		if ($this->error) {
-			return false;
-		}
-
-		$this->reactid = $reactid;
-		$this->username = $username;
-		$this->password = false;
-
-		return $reactid;
-	}
-
-	/**
-	 * Logout
-	 *
-	 * @return	unknown
-	 */
-	function logout() {
-		$this->call('logout');
-		$this->reactid = false;
-		if ($this->error) {
-			return false;
-		}
-		return true;
-	}
-
+//	/**
+//	 * Login
+//	 *
+//	 * @param	string		$username
+//	 * @param	string		$password
+//	 * @return	mixed		false on failure, $reactid on success
+//	 */
+//	function login($username, $password) {
+//		$reactid = $this->call('login', array('username' => $username, 'password' => $password));
+//
+//		if ($this->error) {
+//			return false;
+//		}
+//
+//		$this->reactid = $reactid;
+//		$this->username = $username;
+//		$this->password = false;
+//
+//		return $reactid;
+//	}
+//
+//	/**
+//	 * Logout
+//	 *
+//	 * @return	unknown
+//	 */
+//	function logout() {
+//		$this->call('logout');
+//		$this->reactid = false;
+//		if ($this->error) {
+//			return false;
+//		}
+//		return true;
+//	}
+//
 
 	/**
 	 * Soapcall
@@ -230,48 +230,48 @@ class Soap {
 		}
 		return $array;
 	}
-
-	/**
-	 * Convert array to object
-	 *
-	 * @param	unknown_type		$array
-	 * @return	unknown
-	 */
-	function array2object($array) {
-		if (!is_array($array)) {
-			return $array;
-		}
-
-		foreach ($array as $key => $value) {
-			$array[$key] = $this->array2object($value);
-		}
-		return (object) $array;
-	}
-
-	/**
-	 * Get last request.
-	 *
-	 * @return	unknown
-	 */
-	function lastRequest() {
-		return $this->client->__getLastRequest();
-	}
-
-	/**
-	 * Get last response
-	 *
-	 * @return	unknown
-	 */
-	function lastResponse() {
-		$this->client->__getLastResponse();
-	}
-
-	/**
-	 * Get available functions
-	 *
-	 * @return	unknown
-	 */
-	function getFunctions() {
-		return $this->client->__getFunctions();
-	}
+//
+//	/**
+//	 * Convert array to object
+//	 *
+//	 * @param	unknown_type		$array
+//	 * @return	unknown
+//	 */
+//	function array2object($array) {
+//		if (!is_array($array)) {
+//			return $array;
+//		}
+//
+//		foreach ($array as $key => $value) {
+//			$array[$key] = $this->array2object($value);
+//		}
+//		return (object) $array;
+//	}
+//
+//	/**
+//	 * Get last request.
+//	 *
+//	 * @return	unknown
+//	 */
+//	function lastRequest() {
+//		return $this->client->__getLastRequest();
+//	}
+//
+//	/**
+//	 * Get last response
+//	 *
+//	 * @return	unknown
+//	 */
+//	function lastResponse() {
+//		$this->client->__getLastResponse();
+//	}
+//
+//	/**
+//	 * Get available functions
+//	 *
+//	 * @return	unknown
+//	 */
+//	function getFunctions() {
+//		return $this->client->__getFunctions();
+//	}
 }

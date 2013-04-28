@@ -17,5 +17,6 @@ $console->addCommands(array(
     new Command\SelfUpdateCommand(),
     new Command\UpdateInfoCommand(),
     new Command\UploadCommand(),
+    new Command\TerPingCommand(),
 ));
 $console->run();
