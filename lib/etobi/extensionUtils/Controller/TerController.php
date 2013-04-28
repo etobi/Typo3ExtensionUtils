@@ -16,46 +16,6 @@ class TerController extends AbstractController {
 	 */
 	protected $extensionsXmlFile = '/tmp/t3xutils.extensions.temp.xml';
 
-	/**
-	 * @param $extensionKey
-	 * @param $version
-	 * @param string $destinationPath
-	 */
-	public function fetchAction($extensionKey, $version = NULL, $destinationPath = NULL) {
-		// Find latest version
-		if ($version === NULL) {
-			$result = $this->queryExtensionsXML(
-				'/extensions/extension[@extensionkey="' . $extensionKey . '"]'
-			);
-			$max = -1;
-			foreach ($result->item(0)->childNodes as $versionNode) {
-				if ($versionNode->nodeName == 'version' && $versionNode->hasAttribute('version')) {
-					$date = $versionNode->getElementsByTagName('lastuploaddate')->item(0)->nodeValue;
-					if($date > $max) {
-						$max = $date;
-						$version = $versionNode->getAttribute('version');
-					}
-				}
-			}
-            if($this->logger) {
-                if (!$version) {
-                    $this->logger->warning('could not find latest version of ' . $extensionKey);
-                } else {
-                    $this->logger->notice('fetching latest version of ' . $extensionKey . ', ' . $version);
-                }
-            }
-		}
-		$t3xFile = $extensionKey . '_' . $version . '.t3x';
-		$url = 'http://typo3.org/fileadmin/ter/' . $extensionKey{0} . '/' . $extensionKey{1} . '/' . $t3xFile;
-		exec('wget "' . $url . '" -O ' . ($destinationPath ?: '.') . '/' . $t3xFile);
-	}
-
-	/**
-	 *
-	 */
-	public function updateAction() {
-
-	}
 
 	/**
 	 * @param string $extensionKey

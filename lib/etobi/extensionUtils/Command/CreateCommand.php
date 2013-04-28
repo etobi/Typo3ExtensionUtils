@@ -58,33 +58,4 @@ class CreateCommand extends AbstractCommand
         );
         return 0;
     }
-
-    /**
-     * if an existing file should be overridden
-     *
-     * uses console options or asks the user for permission
-     *
-     * @param $fileName
-     * @return bool
-     */
-    protected function shouldFileBeOverridden($fileName) {
-        if($this->input->getOption('force')) {
-            return TRUE;
-        }
-
-        if(!$this->getHelperSet()->has('dialog')) {
-            $this->logger->debug('DialogHelper is not enabled.');
-            return FALSE;
-        }
-        /**
-         * @var \Symfony\Component\Console\Helper\DialogHelper
-         */
-        $dialogHelper = $this->getHelperSet()->get('dialog');
-        $this->output->writeln(sprintf('The file "%s" already exists', $fileName));
-        return $dialogHelper->askConfirmation(
-            $this->output,
-            '<question>Override existing file? (y/N)</question>',
-            false
-        );
-    }
 }

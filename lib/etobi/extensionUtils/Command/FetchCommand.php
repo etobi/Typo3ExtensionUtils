@@ -42,13 +42,38 @@ class FetchCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $logger = new ConsoleOutputLoggerProxy($output);
-        $controller = new TerController();
-        $controller->setLogger($logger);
-        $controller->fetchAction(
-            $input->getArgument('extensionKey'),
-            $input->hasArgument('version') ? $input->getArgument('version') : NULL,
-            $input->hasArgument('destinationPath') ? $input->getArgument('destinationPath') : NULL
-        );
+        $extensionKey = $input->getArgument('extensionKey');
+        $version = $input->getArgument('version');
+        $destinationPath = $input->getArgument('destinationPath');
+        if(!$version) {
+            $extensionsXmlService = new \etobi\extensionUtils\Service\ExtensionsXml();
+            $version = $extensionsXmlService->findLatestVersion($extensionKey);
+            if (!$version) {
+                $this->logger->critical('could not find latest version of ' . $extensionKey);
+                return 1;
+            } else {
+                $this->logger->info(sprintf('Latest version of %s is %s', $extensionKey, $version));
+            }
+        }
+        if(!$destinationPath) {
+            $destinationPath = $extensionKey . '.t3x';
+            $this->logger->info(sprintf('"%s" used as file name', $destinationPath));
+        }
+
+        if(file_exists($destinationPath) && !$this->shouldFileBeOverridden($destinationPath)) {
+            $this->logger->notice('Aborting because file already exists');
+            return 1;
+        }
+
+        $extensionService = new \etobi\extensionUtils\Service\Extension();
+        $url = $extensionService->getDownloadUri($extensionKey, $version);
+
+        $callback = $this->getProgressCallback();
+        $downloader = new \etobi\extensionUtils\Service\Downloader();
+        $downloader->downloadFile($url, $destinationPath, $callback);
+
+        $this->logger->notice(sprintf('%s (%s) downloaded', $extensionKey, $version));
+
+        return 0;
     }
 }
