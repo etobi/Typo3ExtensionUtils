@@ -97,9 +97,9 @@ class ExtensionsXml {
             /** @var $versionNode \DOMElement */
             if ($versionNode->nodeName == 'version' && $versionNode->hasAttribute('version')) {
                 $versionInfos[] = array(
-                    'version' => $versionNode->getAttribute('version'),
-                    'comment' => $versionNode->getElementsByTagName('uploadcomment')->item(0)->nodeValue,
-                    'timestamp' => $versionNode->getElementsByTagName('lastuploaddate')->item(0)->nodeValue
+                    'version' => $this->sanitizeString($versionNode->getAttribute('version')),
+                    'comment' => $this->sanitizeString($versionNode->getElementsByTagName('uploadcomment')->item(0)->nodeValue),
+                    'timestamp' => $this->sanitizeString($versionNode->getElementsByTagName('lastuploaddate')->item(0)->nodeValue)
                 );
             }
         }
@@ -123,9 +123,29 @@ class ExtensionsXml {
         foreach ($result->item(0)->childNodes as $childNode) {
             /** @var $childNode \DOMElement */
             if ($childNode->nodeType == XML_ELEMENT_NODE) {
-                $infos[$childNode->nodeName] = $childNode->nodeValue;
+                if($childNode->nodeName == 'dependencies') {
+                    $infos[$childNode->nodeName] = $this->sanitizeDependencies($childNode->nodeValue);
+                } else {
+                    $infos[$childNode->nodeName] = $this->sanitizeString($childNode->nodeValue);
+                }
             }
         }
         return $infos;
+    }
+
+    protected function sanitizeString($string) {
+        return str_replace("\r", '', $string);
+    }
+
+    protected function sanitizeDependencies($dependencies) {
+        if(empty($dependencies)) {
+            return array();
+        } else {
+            $dependencies = unserialize($dependencies);
+            if($dependencies === FALSE) {
+                throw new \RuntimeException('dependency information could not be unserialized');
+            }
+            return $dependencies;
+        }
     }
 }
