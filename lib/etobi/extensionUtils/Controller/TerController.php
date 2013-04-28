@@ -2,6 +2,8 @@
 
 namespace etobi\extensionUtils\Controller;
 
+use etobi\extensionUtils\Service\FileSizeProgressBar;
+
 /**
  *
  */
@@ -52,12 +54,7 @@ class TerController extends AbstractController {
 	 *
 	 */
 	public function updateAction() {
-		 // TODO
-        if($this->logger) {
-            $this->logger->info('fetch extension info ...');
-        }
-		$url = 'http://typo3.org/fileadmin/ter/extensions.xml.gz';
-		exec('wget "' . $url . '" -q -O - | gunzip > ' . $this->extensionsXmlFile);
+
 	}
 
 	/**

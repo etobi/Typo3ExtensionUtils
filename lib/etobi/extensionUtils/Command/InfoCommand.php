@@ -16,7 +16,7 @@ use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class InfoCommand extends Command
+class InfoCommand extends AbstractCommand
 {
 
     /**

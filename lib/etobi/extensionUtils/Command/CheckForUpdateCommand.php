@@ -16,7 +16,7 @@ use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class CheckForUpdateCommand extends Command
+class CheckForUpdateCommand extends AbstractCommand
 {
 
     /**

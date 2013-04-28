@@ -14,7 +14,7 @@ use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class UploadCommand extends Command
+class UploadCommand extends AbstractCommand
 {
 
     /**

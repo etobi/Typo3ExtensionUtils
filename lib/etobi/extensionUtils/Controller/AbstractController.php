@@ -2,6 +2,9 @@
 
 namespace etobi\extensionUtils\Controller;
 
+use Symfony\Component\Console\Output\OutputInterface;
+use \Symfony\Component\Console\Helper\ProgressHelper;
+
 abstract class AbstractController {
 
     /**
@@ -13,6 +16,16 @@ abstract class AbstractController {
      * @var null|\Psr\Log\LoggerInterface
      */
     protected $logger = null;
+
+    /**
+     * @var null|OutputInterface
+     */
+    protected $output = null;
+
+    /**
+     * @var null|ProgressHelper
+     */
+    protected $progressHelper = null;
 
     /**
      * @note The dependency on \Psr\Log\LoggerInterface should not be required so that
@@ -30,6 +43,20 @@ abstract class AbstractController {
             throw new \InvalidArgumentException('object expected in ' . __CLASS__ . '::' . __FUNCTION__);
         }
         $this->logger = $logger;
+    }
+
+    /**
+     * @param OutputInterface $ouput
+     */
+    public function setOutput(OutputInterface $ouput) {
+        $this->output = $ouput;
+    }
+
+    /**
+     * @param ProgressHelper $progressHelper
+     */
+    public function setProgressHelper(ProgressHelper $progressHelper) {
+        $this->progressHelper = $progressHelper;
     }
 
 }
