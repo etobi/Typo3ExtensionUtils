@@ -51,11 +51,18 @@ class CreateCommand extends AbstractCommand
         }
 
         $t3xFileService = new T3xFile();
-        $t3xFileService->create(
+        $success = $t3xFileService->create(
             $input->getArgument('extensionKey'),
             $input->getArgument('sourcePath'),
             $t3xFile
         );
-        return 0;
+
+        if($success) {
+            $this->logger->notice(sprintf('"%s" created', $t3xFile));
+            return 0;
+        } else {
+            $this->logger->critical('t3x file was not created');
+            return 1;
+        }
     }
 }

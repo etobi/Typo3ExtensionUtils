@@ -26,7 +26,7 @@ class ExtractCommand extends AbstractCommand
             ->setName('extract')
             ->setDefinition(array(
                 new InputArgument('t3xFile', InputArgument::REQUIRED, 'path to t3x file'),
-                new InputArgument('destinationPath', InputArgument::REQUIRED, 'path of to unpack the extension to'),
+                new InputArgument('destinationPath', InputArgument::OPTIONAL, 'path of to unpack the extension to'),
                 new InputOption('force', 'f', InputOption::VALUE_NONE, 'force override if the folder already exists'),
             ))
             ->setDescription('Extract a t3x file')
@@ -41,6 +41,12 @@ class ExtractCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $destinationPath = $input->getArgument('destinationPath');
+        $t3xFile = $input->getArgument('t3xFile');
+        if(!$destinationPath) {
+            $extensionService = new \etobi\extensionUtils\Service\Extension();
+            $destinationPath = $extensionService->getExtensionNameFromFileName($t3xFile);
+            $this->logger->info(sprintf('"%s" used as folder name', $destinationPath));
+        }
         if(file_exists($destinationPath)) {
             if($this->shouldFolderBeOverridden($destinationPath)) {
                 if($this->deleteDirectory($destinationPath)) {
@@ -56,11 +62,17 @@ class ExtractCommand extends AbstractCommand
         }
 
         $t3xFileService = new T3xFile();
-        $t3xFileService->extract(
-            $input->getArgument('t3xFile'),
+        $success = $t3xFileService->extract(
+            $t3xFile,
             $destinationPath
         );
 
-        return 0;
+        if($success) {
+            $this->logger->notice(sprintf('"%s" extracted', $destinationPath));
+            return 0;
+        } else {
+            $this->logger->critical('extension was not extracted');
+            return 1;
+        }
     }
 }

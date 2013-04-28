@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
+use Symfony\Component\Console\Input\ArrayInput;
 
 /**
  * FetchCommand downloads an extension
@@ -30,6 +31,8 @@ class FetchCommand extends AbstractCommand
                 new InputArgument('extensionKey', InputArgument::REQUIRED, 'the extension you want to fetch'),
                 new InputArgument('version', InputArgument::OPTIONAL, 'the version you want to fetch'),
                 new InputArgument('destinationPath', InputArgument::OPTIONAL, 'the path to write the extension to'),
+                new InputOption('force', 'f', InputOption::VALUE_NONE, 'force override if the file already exists'),
+                new InputOption('extract', 'x', InputOption::VALUE_NONE, 'extract the downloaded file'),
             ))
             ->setDescription('Download an extension')
             //@TODO: longer help text
@@ -56,7 +59,7 @@ class FetchCommand extends AbstractCommand
             }
         }
         if(!$destinationPath) {
-            $destinationPath = $extensionKey . '.t3x';
+            $destinationPath = $extensionKey . '_'. $version . '.t3x';
             $this->logger->info(sprintf('"%s" used as file name', $destinationPath));
         }
 
@@ -74,6 +77,21 @@ class FetchCommand extends AbstractCommand
 
         $this->logger->notice(sprintf('%s (%s) downloaded', $extensionKey, $version));
 
-        return 0;
+        if(!$this->input->getOption('extract')) {
+            return 0;
+        } else {
+            $command = $this->getApplication()->find('extract');
+
+            $arguments = array(
+                'command'          => 'extract',
+                't3xFile'          => $destinationPath,
+                'destinationPath'  => NULL,
+                '--force'          => $input->getOption('force'),
+            );
+
+            $input = new ArrayInput($arguments);
+            return $command->run($input, $output);
+        }
+
     }
 }
