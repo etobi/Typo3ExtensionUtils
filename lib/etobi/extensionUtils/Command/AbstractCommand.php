@@ -54,6 +54,28 @@ abstract class AbstractCommand extends Command
         }
         $this->output = $output;
         $this->input = $input;
+
+        $this->prepareParameters($input, $output);
+    }
+
+    /**
+     * prepare arguments and options before the command is run, use defaults or ask the user
+     *
+     * This method can be overridden to ask the user for missing
+     * data if he did not enter an argument.
+     * The method should be purely used for convenience for the user,
+     * it should not contain any business logic.
+     * For instance:
+     *   * asking the user for a path to store some file is ok,
+     *     if there was an option for it in the console command, but he did not fill it
+     *   * asking if the given folder should be deleted if it exists should be done in the execute() method
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return void
+     */
+    protected function prepareParameters(InputInterface $input, OutputInterface $output) {
+        // noop
     }
 
     /**
@@ -65,6 +87,18 @@ abstract class AbstractCommand extends Command
         }
 
         return $this->getHelperSet()->get('progress');
+    }
+
+    /**
+     * @throws \RuntimeException
+     * @return null|\Symfony\Component\Console\Helper\DialogHelper
+     */
+    protected function getDialogHelper() {
+        if(!$this->getHelperSet()->has('dialog')) {
+            throw new \RuntimeException('DialogHelper is not enabled.');
+        }
+
+        return $this->getHelperSet()->get('dialog');
     }
 
     /**

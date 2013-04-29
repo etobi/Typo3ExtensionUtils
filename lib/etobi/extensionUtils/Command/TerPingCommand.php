@@ -24,7 +24,7 @@ class TerPingCommand extends AbstractCommand
     protected function configure()
     {
         $this
-            ->setName('ping')
+            ->setName('ter:ping')
             ->setDefinition(array())
             ->setDescription('Check SOAP API connectivity')
             //@TODO: longer help text

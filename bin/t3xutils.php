@@ -29,6 +29,7 @@ $console->addCommands(array(
     new Command\UpdateInfoCommand(),
     new Command\UploadCommand(),
     new Command\TerPingCommand(),
+    new Command\TerLoginCommand(),
 ));
 
 
