@@ -7,14 +7,13 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
 
 /**
  * UploadCommand uploads an extension into TER
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class UploadCommand extends AbstractCommand
+class UploadCommand extends AbstractAuthenticatedTerCommand
 {
 
     /**
@@ -25,17 +24,44 @@ class UploadCommand extends AbstractCommand
         $this
             ->setName('upload')
             ->setDefinition(array(
-                new InputArgument('username', InputArgument::REQUIRED, 'Your username at typo3.org'),
-                new InputArgument('password', InputArgument::REQUIRED, 'Your password at typo3.org'),
-                new InputArgument('extensionKey', InputArgument::REQUIRED, 'The extension key you want to upload an extension for'),
-                new InputArgument('uploadComment', InputArgument::REQUIRED, 'Brief description what has changed with this version'),
                 new InputArgument('pathToExtension', InputArgument::REQUIRED, 'the path to the extension on your local file system'),
+                new InputArgument('extensionKey', InputArgument::OPTIONAL, 'The extension key you want to upload an extension for'),
+                new InputOption('comment', 'c', InputOption::VALUE_REQUIRED, 'Brief description what has changed with this version'),
             ))
             ->setDescription('Upload an extension to TER')
             //@TODO: longer help text
 //            ->setHelp()
         ;
+        $this->configureCredentialOptions();
     }
+
+    protected function prepareParameters(InputInterface $input, OutputInterface $output)
+    {
+        // make sure credentials are set
+        $this->prepareCredentialOptions($input, $output);
+
+        if(!$input->getArgument('extensionKey')) {
+            $extensionKey = basename($input->getArgument('pathToExtension'));
+            $extensionKey = $this->getDialogHelper()->ask(
+                $output,
+                sprintf('<question>extension key [%s]:</question> ', $extensionKey),
+                $extensionKey
+            );
+            $this->logger->debug(sprintf('interactively asked for extensionKey. "%s" given', $extensionKey));
+            $input->setArgument('extensionKey', $extensionKey);
+        }
+
+        if(!$input->getOption('comment')) {
+            $comment = $this->getDialogHelper()->ask(
+                $output,
+                '<question>upload comment:</question> '
+            );
+            $this->logger->debug(sprintf('interactively asked for upload comment. "%s" given', $comment));
+            $input->setOption('comment', $comment);
+        }
+
+    }
+
 
     /**
      * {@inheritdoc}
@@ -44,9 +70,9 @@ class UploadCommand extends AbstractCommand
     {
         $upload = new \etobi\extensionUtils\ter\TerUpload();
         $upload->setExtensionKey($input->getArgument('extensionKey'))
-            ->setUsername($input->getArgument('username'))
-            ->setPassword($input->getArgument('password'))
-            ->setUploadComment($input->getArgument('uploadComment'))
+            ->setUsername($input->getOption('username'))
+            ->setPassword($input->getOption('password'))
+            ->setUploadComment($input->getOption('comment'))
             ->setPath($input->getArgument('pathToExtension'));
 
         try {

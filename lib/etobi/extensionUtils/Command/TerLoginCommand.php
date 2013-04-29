@@ -32,7 +32,7 @@ class TerLoginCommand extends AbstractAuthenticatedTerCommand
             //@TODO: longer help text
 //            ->setHelp()
         ;
-        $this->setCredentialOptions();
+        $this->configureCredentialOptions();
     }
 
     /**

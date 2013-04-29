@@ -18,7 +18,7 @@ abstract class AbstractAuthenticatedTerCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    protected function setCredentialOptions()
+    protected function configureCredentialOptions()
     {
         $this->addOption('username', 'u', InputOption::VALUE_REQUIRED, 'Your username at typo3.org');
         $this->addOption('password', 'p', InputOption::VALUE_REQUIRED, 'Your password at typo3.org');
@@ -42,7 +42,7 @@ abstract class AbstractAuthenticatedTerCommand extends AbstractCommand
                     $output,
                     '<question>Username on typo3.org:</question> '
                 );
-                $this->logger->debug(sprintf('interactively asked user. "%s" given', $username));
+                $this->logger->debug(sprintf('interactively asked for username. "%s" given', $username));
             }
             $input->setOption('username', $username);
         }
@@ -57,7 +57,7 @@ abstract class AbstractAuthenticatedTerCommand extends AbstractCommand
                     $output,
                     sprintf('<question>Password [%s]:</question> ', $input->getOption('username'))
                 );
-                $this->logger->debug('interactively asked user for password');
+                $this->logger->debug('interactively asked for password');
             }
             $input->setOption('password', $password);
         }
