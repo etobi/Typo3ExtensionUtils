@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class TerLoginCommand extends AbstractCommand
+class TerLoginCommand extends AbstractAuthenticatedTerCommand
 {
 
     /**
@@ -32,41 +32,7 @@ class TerLoginCommand extends AbstractCommand
             //@TODO: longer help text
 //            ->setHelp()
         ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function prepareParameters(InputInterface $input, OutputInterface $output) {
-        // username
-        if(!$input->getArgument('username')) {
-            if($this->getConfigurationValue('ter.username')) {
-                $username = $this->getConfigurationValue('ter.username');
-                $this->logger->debug(sprintf('use username "%s" from configuration file', $username));
-            } else {
-                $username = $this->getDialogHelper()->ask(
-                    $output,
-                    '<question>Username on typo3.org:</question> '
-                );
-                $this->logger->debug(sprintf('interactively asked user. "%s" given', $username));
-            }
-            $input->setArgument('username', $username);
-        }
-
-        // password
-        if(!$input->getOption('password')) {
-            if($this->getConfigurationValue('ter.password')) {
-                $password = $this->getConfigurationValue('ter.password');
-                $this->logger->debug('use password from configuration file');
-            } else {
-                $password = $this->getDialogHelper()->askHiddenResponse(
-                    $output,
-                    sprintf('<question>Password [%s]:</question> ', $input->getArgument('username'))
-                );
-                $this->logger->debug('interactively asked user for password');
-            }
-            $input->setOption('password', $password);
-        }
+        $this->setCredentialOptions();
     }
 
     /**
@@ -76,7 +42,7 @@ class TerLoginCommand extends AbstractCommand
     {
         $loginRequest = new \etobi\extensionUtils\T3oSoap\LoginRequest();
         $result = $loginRequest->checkCredentials(
-            $input->getArgument('username'),
+            $input->getOption('username'),
             $input->getOption('password')
         );
 
