@@ -5,9 +5,9 @@ namespace etobi\extensionUtils\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
+use etobi\extensionUtils\ConsoleUtility\ConsoleOutputLoggerProxy;
 use Psr\Log\LoggerInterface;
-use etobi\extensionUtils\Service\FileSizeProgressBar;
+use etobi\extensionUtils\ConsoleUtility\FileSizeProgressBar;
 
 /**
  * UpdateInfoCommand updates the extension information

@@ -1,6 +1,6 @@
 <?php
 
-namespace etobi\extensionUtils\Proxy;
+namespace etobi\extensionUtils\ConsoleUtility;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Psr\Log\LoggerInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace etobi\extensionUtils\Service;
+namespace etobi\extensionUtils\ConsoleUtility;
 
 
 use \Symfony\Component\Console\Output\OutputInterface;
