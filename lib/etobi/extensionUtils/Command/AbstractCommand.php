@@ -10,8 +10,6 @@ use Psr\Log\LoggerInterface;
 use etobi\extensionUtils\ConsoleUtility\FileSizeProgressBar;
 
 /**
- * UpdateInfoCommand updates the extension information
- *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
 abstract class AbstractCommand extends Command
