@@ -68,6 +68,20 @@ abstract class AbstractCommand extends Command
     }
 
     /**
+     * get a configuration value a user supplied in a configuration file
+     *
+     * @param $name
+     * @param null $default
+     * @return null
+     */
+    protected function getConfigurationValue($name, $default = NULL) {
+        if(!$this->getHelperSet()->has('config')) {
+            return $default;
+        }
+        return $this->getHelperSet()->get('config')->get($name, $default);
+    }
+
+    /**
      * get a callback that can be used in CURL as a progress callback
      *
      * @return callback|null
