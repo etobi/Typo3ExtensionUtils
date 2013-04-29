@@ -193,24 +193,4 @@ abstract class AbstractCommand extends Command
             false
         );
     }
-
-    /**
-     * @author <erkethan at free dot fr>
-     * @see http://php.net/manual/de/function.rmdir.php#92050
-     * @param $dir
-     * @return bool
-     */
-    protected function deleteDirectory($dir) {
-        if (!file_exists($dir)) return true;
-        if (!is_dir($dir) || is_link($dir)) return unlink($dir);
-        foreach (scandir($dir) as $item) {
-            if ($item == '.' || $item == '..') continue;
-            if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
-                chmod($dir . DIRECTORY_SEPARATOR . $item, 0777);
-                if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) return false;
-            };
-        }
-        return rmdir($dir);
-    }
-
 }

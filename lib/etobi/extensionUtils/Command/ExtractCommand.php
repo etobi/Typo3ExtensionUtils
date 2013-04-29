@@ -49,7 +49,8 @@ class ExtractCommand extends AbstractCommand
         }
         if(file_exists($destinationPath)) {
             if($this->shouldFolderBeOverridden($destinationPath)) {
-                if($this->deleteDirectory($destinationPath)) {
+                $filesystemService = new \etobi\extensionUtils\Service\Filesystem();
+                if($filesystemService->deleteDirectory($destinationPath)) {
                     $this->logger->debug(sprintf('"%s" removed', $destinationPath));
                 } else {
                     $this->logger->critical(sprintf('Could not remove directory "%s"', $destinationPath));
