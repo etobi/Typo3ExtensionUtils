@@ -8,13 +8,6 @@ namespace etobi\extensionUtils\T3oSoap;
 class PingRequest extends AbstractRequest {
 
     /**
-     * @inheritDoc
-     */
-    public function setCredentials($username = NULL, $password = NULL) {
-        throw new \BadMethodCallException('This request does not require credentials.');
-    }
-
-    /**
      * check if the SOAP API is working
      *
      * @return bool
