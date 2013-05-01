@@ -32,6 +32,7 @@ class TerLoginCommand extends AbstractAuthenticatedTerCommand
             //@TODO: longer help text
 //            ->setHelp()
         ;
+        $this->configureSoapOptions();
         $this->configureCredentialOptions();
     }
 
@@ -40,11 +41,8 @@ class TerLoginCommand extends AbstractAuthenticatedTerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $loginRequest = new \etobi\extensionUtils\T3oSoap\LoginRequest();
-        $result = $loginRequest->checkCredentials(
-            $input->getOption('username'),
-            $input->getOption('password')
-        );
+        $loginRequest = $this->getRequestObject('\\etobi\\extensionUtils\\T3oSoap\\LoginRequest');
+        $result = $loginRequest->checkCredentials();
 
         if($result) {
             $output->writeln('Your credentials are valid.');

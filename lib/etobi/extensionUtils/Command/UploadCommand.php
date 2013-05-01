@@ -32,6 +32,7 @@ class UploadCommand extends AbstractAuthenticatedTerCommand
             //@TODO: longer help text
 //            ->setHelp()
         ;
+        $this->configureSoapOptions();
         $this->configureCredentialOptions();
     }
 

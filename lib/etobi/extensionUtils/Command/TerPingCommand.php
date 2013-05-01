@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class TerPingCommand extends AbstractCommand
+class TerPingCommand extends AbstractTerCommand
 {
 
     /**
@@ -30,6 +30,7 @@ class TerPingCommand extends AbstractCommand
             //@TODO: longer help text
 //            ->setHelp()
         ;
+        $this->configureSoapOptions();
     }
 
     /**
@@ -37,7 +38,7 @@ class TerPingCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $pingRequest = new \etobi\extensionUtils\T3oSoap\PingRequest();
+        $pingRequest = $this->getRequestObject('\\etobi\\extensionUtils\\T3oSoap\\PingRequest');
         if($pingRequest->isApiWorking()) {
             $output->writeln('The API is working.');
             return 0;

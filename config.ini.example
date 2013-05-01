@@ -1,3 +1,4 @@
 [ter]
+    wsdl=http://www.typo3.org/wsdl/tx_ter_wsdl.php
     username=kasper
     password=joh316

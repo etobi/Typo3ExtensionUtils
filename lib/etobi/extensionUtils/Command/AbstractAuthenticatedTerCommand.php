@@ -12,7 +12,7 @@ use etobi\extensionUtils\ConsoleUtility\FileSizeProgressBar;
 /**
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-abstract class AbstractAuthenticatedTerCommand extends AbstractCommand
+abstract class AbstractAuthenticatedTerCommand extends AbstractTerCommand
 {
 
     /**

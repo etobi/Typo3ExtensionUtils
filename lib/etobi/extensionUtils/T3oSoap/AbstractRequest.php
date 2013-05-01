@@ -73,6 +73,14 @@ abstract class AbstractRequest {
     }
 
     /**
+     * @return string
+     */
+    public function getWsdlURL()
+    {
+        return $this->wsdlURL;
+    }
+
+    /**
      * @param \etobi\extensionUtils\T3oSoap\Client|null $client
      */
     public function setClient($client)
