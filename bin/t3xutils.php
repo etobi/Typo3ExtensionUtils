@@ -30,7 +30,12 @@ $console->addCommands(array(
     new Command\UploadCommand(),
     new Command\TerPingCommand(),
     new Command\TerLoginCommand(),
+    new Command\EmconfUpdateCommand(),
 ));
 
+// remove the option --version. We need this for extension handling
+$options = $console->getDefinition()->getOptions();
+unset($options['version']);
+$console->getDefinition()->setOptions($options);
 
 $console->run();

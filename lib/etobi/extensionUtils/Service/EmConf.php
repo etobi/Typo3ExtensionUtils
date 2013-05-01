@@ -105,6 +105,8 @@ class EmConf {
         if(!$success) {
             throw new \RuntimeException(sprintf('Could not write to file "%s".', $fileName));
         }
+
+        return TRUE;
     }
 
     public function toString() {
