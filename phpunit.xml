@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    bootstrap="lib/bootstrap.php"
+    colors="true"
+>
+    <testsuites>
+        <testsuite name="My TestSuite">
+            <directory>lib/etobi/extensionUtils/Tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
