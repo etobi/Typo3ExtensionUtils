@@ -57,7 +57,7 @@ abstract class AbstractAuthenticatedRequest extends AbstractRequest {
      * apply the credentials to this SOAP API call
      */
     protected function assignCredentialsToClient() {
-        $this->client->addArgument('accountData', array(
+        $this->client->addArgument(array(
             'username' => $this->username,
             'password' => $this->password
         ));

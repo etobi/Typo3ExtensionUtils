@@ -49,7 +49,11 @@ class Client {
             $this->setFunctionName($functionName);
         }
         if(!empty($arguments)) {
-            $this->addArguments($arguments);
+            if(is_array($arguments)) {
+                $this->addArguments($arguments);
+            } else {
+                $this->addArgument($arguments);
+            }
         }
         $soapClient = $this->getSoapClient();
         $return = $soapClient->__call($this->functionName, $this->arguments);
@@ -78,14 +82,16 @@ class Client {
      * @param string  $name
      * @param mixed   $value
      */
-    public function addArgument($name, $value) {
-        $this->arguments[$name] = $value;
+    public function addArgument($value) {
+        $this->arguments[] = $value;
     }
 
     /**
      * @param array  $arguments
      */
     public function addArguments($arguments) {
-        $this->arguments = array_merge($this->arguments, $arguments);
+        foreach($arguments as $argument) {
+            $this->addArgument($argument);
+        }
     }
 }

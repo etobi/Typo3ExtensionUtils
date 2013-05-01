@@ -24,10 +24,7 @@ class TerLoginCommand extends AbstractAuthenticatedTerCommand
     {
         $this
             ->setName('ter:login-test')
-            ->setDefinition(array(
-                new InputArgument('username', InputArgument::OPTIONAL, 'Your username at typo3.org'),
-                new InputOption('password', 'p', InputOption::VALUE_REQUIRED, 'Your password at typo3.org'),
-            ))
+            ->setDefinition(array())
             ->setDescription('Checks if a username and password are valid credentials for TYPO3 SOAP API')
             //@TODO: longer help text
 //            ->setHelp()
