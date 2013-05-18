@@ -33,6 +33,7 @@ $console->addCommands(array(
     new Command\EmconfUpdateCommand(),
     new Command\TerCheckExtensionKeyCommand(),
     new Command\TerRegisterExtensionKeyCommand(),
+	new Command\TerDeleteExtensionKeyCommand(),
 ));
 
 // remove the option --version. We need this for extension handling
