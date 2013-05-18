@@ -5,6 +5,7 @@ namespace etobi\extensionUtils;
 function register_autoload() {
 	spl_autoload_register( function($class) {
         // Only attempt to load classes in our namespace
+		$class = ltrim($class, '\\');
         if(    substr( $class, 0, 21 ) !== 'etobi\\extensionUtils\\'
             && substr( $class, 0, 26 ) !== 'Symfony\\Component\\Console\\'
             && substr( $class, 0, 8 )  !== 'Psr\\Log\\'
