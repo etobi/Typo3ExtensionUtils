@@ -96,7 +96,7 @@ class Dispatcher {
 			'help' => 'help',
 			'version' => 'version',
 			'updateinfo' => 'updateinfo',
-			'info' => 'info <extensionKey> [<version]',
+			'info' => 'info <extensionKey> [<version>]',
 			'fetch' => 'fetch <extensionKey> [<version>] [<destinationPath>]',
 			'upload' => 'upload <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>',
 			'extract' => 'extract <t3x-file> <destinationPath>',
