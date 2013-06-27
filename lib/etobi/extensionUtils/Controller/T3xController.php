@@ -74,6 +74,19 @@ class T3xController {
 	}
 
 	/**
+	 * @param string $t3xFilePath
+	 * @throws \Exception
+	 */
+	public function listFilesAction($t3xFilePath, $fullDetails = FALSE) {
+		if (!file_exists($t3xFilePath) || !is_file($t3xFilePath) || !is_readable($t3xFilePath)) {
+			throw new \Exception('Cant read "' . $t3xFilePath . '"');
+		}
+
+		$extensionData = $this->extractExtensionDataFromT3x($t3xFilePath);
+		$this->listFiles($extensionData['FILES'], $fullDetails);
+	}
+
+	/**
 	 * @param string $extKey
 	 * @param array $emConf
 	 * @param string $destinationPath
@@ -126,6 +139,22 @@ $EM_CONF[$_EXTKEY] = ' . var_export($emConf, TRUE) . ';
 				if (!$res) {
 					throw new \Exception('Cant write file "' . $fullFilePath . '"');
 				}
+			}
+		}
+	}
+
+	/**
+	 * @param array $files
+	 * @param boolean $fullDetails
+	 * @throws \Exception
+	 */
+	protected function listFiles($files, $fullDetails) {
+		if (!is_array($files)) return;
+		foreach ($files as $info) {
+			if ($fullDetails === TRUE) {
+				echo $info['content_md5'].' '.$info['size'].' '.utf8_decode($info['name']).PHP_EOL;
+			} else {
+				echo $info['name'].PHP_EOL;
 			}
 		}
 	}
