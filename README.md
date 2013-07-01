@@ -28,6 +28,7 @@ TYPO3 CMS core isn't needed at all for this utilities.
 * (coming) Check extension files against MD5 sums to find modified files
 * √ Extract extension from a .t3x file
 * √ Create a .t3x from a extension path
+* √ List extension files in a .t3x file
 
 
 ### Help
