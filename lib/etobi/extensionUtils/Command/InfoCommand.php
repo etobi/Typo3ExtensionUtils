@@ -5,6 +5,7 @@ namespace etobi\extensionUtils\Command;
 use etobi\extensionUtils\Controller\TerController;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -46,8 +47,21 @@ class InfoCommand extends AbstractCommand
         $extensionKey = $input->getArgument('extensionKey');
         $version = $input->getArgument('version');
 
+	    $extensionsXmlService = new \etobi\extensionUtils\Service\ExtensionsXml();
+	    try {
+		    $extensionsXmlService->isFileValid();
+	    } catch(\InvalidArgumentException $e) {
+		    $this->logger->info('Information file is not yet loaded. Fetch it.');
+
+		    $command = $this->getApplication()->find('updateinfo');
+		    $arguments = array(
+			    'command' => 'updateinfo',
+		    );
+		    $updateInfoInput = new ArrayInput($arguments);
+		    $command->run($updateInfoInput, $output);
+	    }
+
         if(!$version && $input->getOption('latest')) {
-            $extensionsXmlService = new \etobi\extensionUtils\Service\ExtensionsXml();
             $version = $extensionsXmlService->findLatestVersion($extensionKey);
             $input->setArgument('version', $version);
             $this->logger->info(sprintf('Latest version of %s is %s', $extensionKey, $version));

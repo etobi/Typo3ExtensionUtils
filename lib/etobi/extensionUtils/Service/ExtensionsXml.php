@@ -26,6 +26,9 @@ class ExtensionsXml {
      * @throws \InvalidArgumentException
      */
     protected function ensureValidFile() {
+	    if(empty($this->extensionsXmlFile)) {
+		    throw new \InvalidArgumentException('No extension file is set');
+	    }
         if(!file_exists($this->extensionsXmlFile)) {
             throw new \InvalidArgumentException(sprintf('The extension file "%s" does not exist', $this->extensionsXmlFile));
         }
@@ -33,6 +36,10 @@ class ExtensionsXml {
             throw new \InvalidArgumentException(sprintf('The extension file "%s" is not readable', $this->extensionsXmlFile));
         }
     }
+
+	public function isFileValid() {
+		$this->ensureValidFile();
+	}
 
     /**
      * queryExtensionsXML
