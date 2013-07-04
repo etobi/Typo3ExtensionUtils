@@ -80,10 +80,10 @@ class FetchCommand extends AbstractCommand
         if(!$this->input->getOption('extract')) {
             return 0;
         } else {
-            $command = $this->getApplication()->find('extract');
+            $command = $this->getApplication()->find('t3x:extract');
 
             $arguments = array(
-                'command'          => 'extract',
+                'command'          => 't3x:extract',
                 't3xFile'          => $destinationPath,
                 'destinationPath'  => NULL,
                 '--force'          => $input->getOption('force'),
