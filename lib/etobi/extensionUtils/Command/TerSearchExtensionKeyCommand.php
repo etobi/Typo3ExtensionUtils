@@ -29,7 +29,7 @@ class TerSearchExtensionKeyCommand extends AbstractAuthenticatedTerCommand
 				new InputArgument('extensionKey', InputArgument::OPTIONAL, 'the extension key to search for'),
 				new InputOption('width', NULL, InputOption::VALUE_OPTIONAL, 'maximum display width in columns', 80),
 			))
-			->setDescription('Search an extension by username')
+			->setDescription('Search an extension by extension key')
 			//@TODO: longer help text
 //            ->setHelp()
 		;
