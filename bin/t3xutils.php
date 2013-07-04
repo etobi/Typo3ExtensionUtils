@@ -34,6 +34,9 @@ $console->addCommands(array(
     new Command\TerCheckExtensionKeyCommand(),
     new Command\TerRegisterExtensionKeyCommand(),
 	new Command\TerDeleteExtensionKeyCommand(),
+	new Command\TerSearchAllCommand(),
+	new Command\TerSearchUserCommand(),
+	new Command\TerSearchExtensionKeyCommand(),
 ));
 
 // remove the option --version. We need this for extension handling
