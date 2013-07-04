@@ -17,7 +17,7 @@ use etobi\extensionUtils\Service\T3xFile;
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class CreateCommand extends AbstractCommand
+class T3xCreateCommand extends AbstractCommand
 {
 
     /**
@@ -26,7 +26,7 @@ class CreateCommand extends AbstractCommand
     protected function configure()
     {
         $this
-            ->setName('create')
+            ->setName('t3x:create')
             ->setDefinition(array(
                 new InputArgument('extensionKey', InputArgument::REQUIRED, 'extension key'),
                 new InputArgument('sourcePath', InputArgument::REQUIRED, 'path of the extension'),

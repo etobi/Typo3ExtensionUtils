@@ -14,7 +14,7 @@ use etobi\extensionUtils\Service\T3xFile;
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class ExtractCommand extends AbstractCommand
+class T3xExtractCommand extends AbstractCommand
 {
 
     /**
@@ -23,7 +23,7 @@ class ExtractCommand extends AbstractCommand
     protected function configure()
     {
         $this
-            ->setName('extract')
+            ->setName('t3x:extract')
             ->setDefinition(array(
                 new InputArgument('t3xFile', InputArgument::REQUIRED, 'path to t3x file'),
                 new InputArgument('destinationPath', InputArgument::OPTIONAL, 'path of to unpack the extension to'),
