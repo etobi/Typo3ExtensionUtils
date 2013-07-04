@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class UploadCommand extends AbstractAuthenticatedTerCommand
+class TerUploadCommand extends AbstractAuthenticatedTerCommand
 {
 
     /**
@@ -22,7 +22,7 @@ class UploadCommand extends AbstractAuthenticatedTerCommand
     protected function configure()
     {
         $this
-            ->setName('upload')
+            ->setName('ter:upload')
             ->setDefinition(array(
                 new InputArgument('pathToExtension', InputArgument::REQUIRED, 'the path to the extension on your local file system'),
                 new InputArgument('extensionKey', InputArgument::OPTIONAL, 'The extension key you want to upload an extension for'),

@@ -27,7 +27,7 @@ $console->addCommands(array(
     new Command\InfoCommand(),
     new Command\SelfUpdateCommand(),
     new Command\UpdateInfoCommand(),
-    new Command\UploadCommand(),
+    new Command\TerUploadCommand(),
     new Command\TerPingCommand(),
     new Command\TerLoginCommand(),
     new Command\EmconfUpdateCommand(),

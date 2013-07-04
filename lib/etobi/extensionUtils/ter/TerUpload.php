@@ -30,6 +30,7 @@
 ***************************************************************/
 
 namespace etobi\extensionUtils\ter;
+use etobi\extensionUtils\Service\EmConf;
 
 /**
  * Handle upload to TER.
@@ -174,7 +175,8 @@ class TerUpload {
 	 */
 	protected function getEmConf() {
 		if ($this->emConf === NULL) {
-			$this->emConf = Helper::getEmConf($this->extensionKey, $this->path);
+			$emConf = new EmConf($this->path . 'ext_emconf.php');
+			$this->emConf = $emConf->toArray();
 		}
 		return $this->emConf;
 	}
