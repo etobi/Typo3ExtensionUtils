@@ -48,8 +48,22 @@ class FetchCommand extends AbstractCommand
         $extensionKey = $input->getArgument('extensionKey');
         $version = $input->getArgument('version');
         $destinationPath = $input->getArgument('destinationPath');
+
+	    $extensionsXmlService = new \etobi\extensionUtils\Service\ExtensionsXml();
+	    try {
+		    $extensionsXmlService->isFileValid();
+	    } catch(\InvalidArgumentException $e) {
+		    $this->logger->info('Information file is not yet loaded. Fetch it.');
+
+		    $command = $this->getApplication()->find('updateinfo');
+		    $arguments = array(
+			    'command' => 'updateinfo',
+		    );
+		    $updateInfoInput = new ArrayInput($arguments);
+		    $command->run($updateInfoInput, $output);
+	    }
+
         if(!$version) {
-            $extensionsXmlService = new \etobi\extensionUtils\Service\ExtensionsXml();
             $version = $extensionsXmlService->findLatestVersion($extensionKey);
             if (!$version) {
                 $this->logger->critical('could not find latest version of ' . $extensionKey);
