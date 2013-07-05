@@ -31,6 +31,7 @@
 
 namespace etobi\extensionUtils\ter;
 use etobi\extensionUtils\Service\EmConf;
+use etobi\extensionUtils\T3oSoap\UploadRequest;
 
 /**
  * Handle upload to TER.
@@ -79,23 +80,13 @@ class TerUpload {
 	 */
 	public function execute() {
 		$this->checkRequirements();
-		$soap = new Soap();
-		$soap->init(array(
-			'wsdl' => $this->wsdlURL,
-			'soapoptions' => array(
-				'trace' => 1,
-				'exceptions' => 1
-			)
-		));
-		$response = $soap->call(
-			'uploadExtension',
-			array(
-				'accountData' => $this->getAccountData(),
-				'extensionData' => $this->getExtensionData(),
-				'filesData' => Helper::getExtensionFilesData($this->path)
-			)
+
+		$uploadRequest = new UploadRequest();
+		$uploadRequest->setCredentials($this->username, $this->password);
+		return $uploadRequest->upload(
+			$this->getExtensionData(),
+			Helper::getExtensionFilesData($this->path)
 		);
-		return $response;
 	}
 
 	/**
