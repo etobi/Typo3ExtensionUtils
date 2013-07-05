@@ -31,9 +31,10 @@ class T3xFile {
             throw new \InvalidArgumentException(sprintf('Can\'t write "%s"', $t3xFilePath));
         }
 
+	    $emConf = new EmConf($sourcePath);
         $extensionData = array(
             'extKey' => $extensionKey,
-            'EM_CONF' => \etobi\extensionUtils\ter\Helper::getEmConf($extensionKey, $sourcePath),
+            'EM_CONF' => $emConf->toArray(),
             'misc' => array(),
             'techInfo' => array(),
             'FILES' => \etobi\extensionUtils\ter\Helper::getExtensionFilesData($sourcePath)

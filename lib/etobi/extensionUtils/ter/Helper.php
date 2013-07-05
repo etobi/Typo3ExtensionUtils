@@ -155,17 +155,6 @@ class Helper {
 		return $dirs;
 	}
 
-	public static function getEmConf($extensionKey, $path) {
-		$EM_CONF = array();
-		$_EXTKEY = $extensionKey;
-		require $path . 'ext_emconf.php';
-		$emConf = $EM_CONF[$_EXTKEY];
-		if (empty($emConf['title']) || empty($emConf['version'])) {
-			throw new \Exception('Invalid $EM_CONF');
-		}
-		return $emConf;
-	}
-
 	/**
 	 * @param $path
 	 * @param string $excludeForPackaging
