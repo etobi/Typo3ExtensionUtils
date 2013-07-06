@@ -43,6 +43,8 @@ $console->addCommands(array(
 // remove the option --version. We need this for extension handling
 $options = $console->getDefinition()->getOptions();
 unset($options['version']);
+//@todo: make code pay respect to the option an re-enable it
+unset($options['no-interaction']);
 $console->getDefinition()->setOptions($options);
 
 $console->run();
