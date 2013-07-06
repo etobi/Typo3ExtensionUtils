@@ -5,6 +5,9 @@ namespace etobi\extensionUtils\Command\Ter;
 use etobi\extensionUtils\Command\AbstractCommand;
 use etobi\extensionUtils\Controller\TerController;
 
+use etobi\extensionUtils\Service\Downloader;
+use etobi\extensionUtils\Service\Extension;
+use etobi\extensionUtils\Service\ExtensionsXml;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,8 +37,21 @@ class FetchCommand extends AbstractCommand
                 new InputOption('extract', 'x', InputOption::VALUE_NONE, 'extract the downloaded file'),
             ))
             ->setDescription('Download an extension')
-            //@TODO: longer help text
-//            ->setHelp()
+            ->setHelp(<<<EOT
+Download an extension
+
+Example
+=======
+
+Download the latest version of "my_extension" and store the t3x as my_extension_1.2.3.t3x
+
+  t3xutils ter:fetch my_extension
+
+Download extension "my_extension" in version 1.2.3, extract and store as my_extension
+
+  t3xutils ter:fetch -x my_extension 1.2.3 my_extension
+EOT
+)
         ;
     }
 
@@ -48,7 +64,7 @@ class FetchCommand extends AbstractCommand
         $version = $input->getArgument('version');
         $destinationPath = $input->getArgument('destinationPath');
 
-	    $extensionsXmlService = new \etobi\extensionUtils\Service\ExtensionsXml();
+	    $extensionsXmlService = new ExtensionsXml();
 	    try {
 		    $extensionsXmlService->isFileValid();
 	    } catch(\InvalidArgumentException $e) {
@@ -81,11 +97,11 @@ class FetchCommand extends AbstractCommand
             return 1;
         }
 
-        $extensionService = new \etobi\extensionUtils\Service\Extension();
+        $extensionService = new Extension();
         $url = $extensionService->getDownloadUri($extensionKey, $version);
 
         $callback = $this->getProgressCallback();
-        $downloader = new \etobi\extensionUtils\Service\Downloader();
+        $downloader = new Downloader();
         $downloader->downloadFile($url, $destinationPath, $callback);
 
         $this->logger->notice(sprintf('%s (%s) downloaded', $extensionKey, $version));
