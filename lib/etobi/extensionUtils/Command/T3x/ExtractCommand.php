@@ -3,6 +3,7 @@
 namespace etobi\extensionUtils\Command\T3x;
 
 use etobi\extensionUtils\Command\AbstractCommand;
+use etobi\extensionUtils\Service\Extension;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -31,8 +32,21 @@ class ExtractCommand extends AbstractCommand
                 new InputOption('force', 'f', InputOption::VALUE_NONE, 'force override if the folder already exists'),
             ))
             ->setDescription('Extract a t3x file')
-            //@TODO: longer help text
-//            ->setHelp()
+            ->setHelp(<<<EOT
+Extract a t3x file into a local folder
+
+Example
+=======
+
+Extract my_extension.t3x to the folder "my_extension/"
+
+  t3xutils t3x:extract my_extension.t3x
+
+Create or update the folder "my_extension" by extracting "latest.t3x"
+
+  t3xutils t3x:extract -f latest.t3x my_extension/
+EOT
+)
         ;
     }
 
@@ -44,7 +58,7 @@ class ExtractCommand extends AbstractCommand
         $destinationPath = $input->getArgument('destinationPath');
         $t3xFile = $input->getArgument('t3xFile');
         if(!$destinationPath) {
-            $extensionService = new \etobi\extensionUtils\Service\Extension();
+            $extensionService = new Extension();
             $destinationPath = $extensionService->getExtensionNameFromFileName($t3xFile);
             $this->logger->info(sprintf('"%s" used as folder name', $destinationPath));
         }
