@@ -4,6 +4,7 @@ namespace etobi\extensionUtils\Command\Ter;
 
 use etobi\extensionUtils\Controller\SelfController;
 
+use etobi\extensionUtils\T3oSoap\Exception\ExtensionKeyNotValidException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -27,9 +28,28 @@ class CheckExtensionKeyCommand extends AbstractAuthenticatedTerCommand
             ->setDefinition(array(
                 new InputArgument('extensionKey', InputArgument::OPTIONAL, 'the extension key to check'),
             ))
-            ->setDescription('Checks if a given extension key is available for registration')
-            //@TODO: longer help text
-//            ->setHelp()
+            ->setDescription('Check if a given extension key is available for registration')
+            ->setHelp(<<<EOT
+Check if a given extension key is a valid extension key and is available for registration.
+
+This also finds extension keys that don't have any uploads and therefor can't
+be found on typo3.org.
+
+Example
+=======
+
+Check if the extension key "my_extension" is valid and available for registration
+
+  t3xutils ter:check-key my_extension
+
+Return codes
+============
+
+* `0` if the key is available for registration
+* `1` if the key is already registered
+* `2` if the key is formally invalid
+EOT
+)
         ;
         $this->configureSoapOptions();
         $this->configureCredentialOptions();
@@ -55,6 +75,7 @@ class CheckExtensionKeyCommand extends AbstractAuthenticatedTerCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $extensionKey = $input->getArgument('extensionKey');
+	    /** @var \etobi\extensionUtils\T3oSoap\CheckExtensionKeyRequest $checkRequest */
         $checkRequest = $this->getRequestObject('\\etobi\\extensionUtils\\T3oSoap\\CheckExtensionKeyRequest');
         try {
             $result = $checkRequest->checkExtensionKey($extensionKey);
@@ -66,9 +87,9 @@ class CheckExtensionKeyCommand extends AbstractAuthenticatedTerCommand
                 $output->writeln(sprintf('<error>"%s" is already taken</error>', $extensionKey));
                 return 1;
             }
-        } catch (\etobi\extensionUtils\T3oSoap\Exception\ExtensionKeyNotValidException $e) {
+        } catch (ExtensionKeyNotValidException $e) {
             $output->writeln(sprintf('<error>"%s" is not formally valid as extension key and cannot be registered</error>', $extensionKey));
-            return 1;
+            return 2;
         }
     }
 }
