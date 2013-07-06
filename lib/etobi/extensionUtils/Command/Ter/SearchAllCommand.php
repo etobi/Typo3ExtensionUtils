@@ -25,15 +25,31 @@ class SearchAllCommand extends AbstractAuthenticatedTerCommand
 		$this
 			->setName('ter:search:all')
 			->setDefinition(array(
-				new InputOption('user', NULL, InputArgument::OPTIONAL, 'search by user name'),
-				new InputOption('extensionKey', NULL, InputArgument::OPTIONAL, 'the extension key to search'),
-				new InputOption('title', NULL, InputArgument::OPTIONAL, 'search by extension title'),
-				new InputOption('description', NULL, InputArgument::OPTIONAL, 'search by description'),
+				new InputOption('user', NULL, InputOption::VALUE_REQUIRED, 'search by user name'),
+				new InputOption('extensionKey', NULL, InputOption::VALUE_REQUIRED, 'the extension key to search'),
+				new InputOption('title', NULL, InputOption::VALUE_REQUIRED, 'search by extension title'),
+				new InputOption('description', NULL, InputOption::VALUE_REQUIRED, 'search by description'),
 				new InputOption('width', NULL, InputOption::VALUE_OPTIONAL, 'maximum display width in columns', 80),
 			))
-			->setDescription('Search an extension that matches all the given limitations')
-			//@TODO: longer help text
-//            ->setHelp()
+			->setDescription('Search an extension key that matches all the given limitations')
+            ->setHelp(<<<EOT
+Search an extension key.
+
+If you set multiple options, they are connected with AND.
+
+Example
+=======
+
+Show all extensions that have "news" in their title
+
+  t3xutils ter:search:all --title="*news*"
+
+Show all extensions by the user "john.doe" that have "news" in their description
+
+  t3xutils ter:search:all --user="john.doe" --title="*news*"
+
+EOT
+)
 		;
 		$this->configureSoapOptions();
 		$this->configureCredentialOptions();
@@ -49,10 +65,10 @@ class SearchAllCommand extends AbstractAuthenticatedTerCommand
 		 */
 		$search = $this->getRequestObject('\\etobi\\extensionUtils\\T3oSoap\\SearchRequest');
 		$results = $search->search(
-			$input->getOption('user'),
-			$input->getOption('extensionKey'),
-			$input->getOption('title'),
-			$input->getOption('description')
+			str_replace('*', '%', $input->getOption('user')),
+			str_replace('*', '%', $input->getOption('extensionKey')),
+			str_replace('*', '%', $input->getOption('title')),
+			str_replace('*', '%', $input->getOption('description'))
 		);
 		if(count($results) == 0) {
 			$this->output->writeln('Nothing found');
