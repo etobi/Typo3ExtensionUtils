@@ -28,8 +28,14 @@ class UpdateInfoCommand extends AbstractCommand
             ->setName('ter:update-info')
             ->setDefinition(array())
             ->setDescription('Update local extension information cache')
-            //@TODO: longer help text
-//            ->setHelp()
+            ->setHelp(<<<EOT
+Update the locally cached extension information.
+
+It is recommended that you update this regularly.
+If you can't find the latest version of an extension, it is most likely that the
+extension information cache is outdated.
+EOT
+)
         ;
     }
 
