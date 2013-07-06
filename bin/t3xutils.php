@@ -20,8 +20,9 @@ $console->getHelperSet()->set($config);
 
 // add all available commands
 $console->addCommands(array(
-    new Command\Self\CheckUpdateCommand(),
-	new Command\Self\UpdateCommand(),
+// disabled, because they don't work yet
+//	new Command\Self\CheckUpdateCommand(),
+//	new Command\Self\UpdateCommand(),
     new Command\T3x\CreateCommand(),
     new Command\T3x\ExtractCommand(),
     new Command\Ter\FetchCommand(),
