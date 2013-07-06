@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
 use etobi\extensionUtils\Service\T3xFile;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * ExtractCommand extracts a T3X file
@@ -49,13 +50,9 @@ class T3xExtractCommand extends AbstractCommand
         }
         if(file_exists($destinationPath)) {
             if($this->shouldFolderBeOverridden($destinationPath)) {
-                $filesystemService = new \etobi\extensionUtils\Service\Filesystem();
-                if($filesystemService->deleteDirectory($destinationPath)) {
-                    $this->logger->debug(sprintf('"%s" removed', $destinationPath));
-                } else {
-                    $this->logger->critical(sprintf('Could not remove directory "%s"', $destinationPath));
-                    return 1;
-                }
+                $filesystemService = new Filesystem();
+                $filesystemService->remove($destinationPath);
+                $this->logger->debug(sprintf('"%s" removed', $destinationPath));
             } else {
                 $this->logger->notice('Aborting because folder already exists');
                 return 1;

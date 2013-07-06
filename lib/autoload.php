@@ -8,6 +8,7 @@ function register_autoload() {
 		$class = ltrim($class, '\\');
         if(    substr( $class, 0, 21 ) !== 'etobi\\extensionUtils\\'
             && substr( $class, 0, 26 ) !== 'Symfony\\Component\\Console\\'
+	        && substr( $class, 0, 29 ) !== 'Symfony\\Component\\Filesystem\\'
             && substr( $class, 0, 8 )  !== 'Psr\\Log\\'
         ) {
             return;
