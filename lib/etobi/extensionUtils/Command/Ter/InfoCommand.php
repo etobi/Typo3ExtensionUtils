@@ -28,7 +28,7 @@ class InfoCommand extends AbstractCommand
             ->setName('ter:info')
             ->setDefinition(array(
                 new InputArgument('extensionKey', InputArgument::REQUIRED, 'the extension key you want information on'),
-                new InputArgument('version', InputArgument::OPTIONAL, 'get information on an specific version'),
+                new InputArgument('version', NULL, InputOption::VALUE_REQUIRED, 'get information on an specific version'),
                 new InputOption('latest', 'l', InputOption::VALUE_NONE, 'get information on the latest version if non is specified'),
                 new InputOption('width', NULL, InputOption::VALUE_OPTIONAL, 'maximum display width in columns', 80),
             ))
@@ -44,7 +44,7 @@ class InfoCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $extensionKey = $input->getArgument('extensionKey');
-        $version = $input->getArgument('version');
+        $version = $input->getOption('version');
 
 	    $extensionsXmlService = new \etobi\extensionUtils\Service\ExtensionsXml();
 	    try {
@@ -151,7 +151,7 @@ class InfoCommand extends AbstractCommand
      */
     protected function executeVersionInfo(InputInterface $input, OutputInterface $output) {
         $extensionKey = $input->getArgument('extensionKey');
-        $version = $input->getArgument('version');
+        $version = $input->getOption('version');
 
         $extensionsXmlService = new \etobi\extensionUtils\Service\ExtensionsXml();
         $infos = $extensionsXmlService->getVersionInfo($extensionKey, $version);
