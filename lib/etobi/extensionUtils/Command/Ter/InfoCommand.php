@@ -5,6 +5,7 @@ namespace etobi\extensionUtils\Command\Ter;
 use etobi\extensionUtils\Command\AbstractCommand;
 use etobi\extensionUtils\Controller\TerController;
 
+use etobi\extensionUtils\Service\ExtensionsXml;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -28,13 +29,32 @@ class InfoCommand extends AbstractCommand
             ->setName('ter:info')
             ->setDefinition(array(
                 new InputArgument('extensionKey', InputArgument::REQUIRED, 'the extension key you want information on'),
-                new InputArgument('version', NULL, InputOption::VALUE_REQUIRED, 'get information on an specific version'),
+                new InputOption('version', NULL, InputOption::VALUE_REQUIRED, 'get information on an specific version'),
                 new InputOption('latest', 'l', InputOption::VALUE_NONE, 'get information on the latest version if non is specified'),
                 new InputOption('width', NULL, InputOption::VALUE_OPTIONAL, 'maximum display width in columns', 80),
             ))
-            ->setDescription('Get information about an extension')
-            //@TODO: longer help text
-//            ->setHelp()
+            ->setDescription('Get information about a version of an extension')
+            ->setHelp(<<<EOT
+Get information about versions of an extension.
+
+If you are looking for information on extensions without any versions, check the ter:search:extension-key command.
+
+Example
+=======
+
+List all versions of the extension "my_extension"
+
+  t3xutils ter:info my_extension
+
+Show detailed information on the latest version of "my_extension"
+
+  t3xutils ter:info --latest my_extension
+
+Show detailed information on version "1.2.3" of "my_extension"
+
+  t3xutils ter:info --version="1.2.3" my_extension
+EOT
+)
         ;
     }
 
@@ -46,7 +66,7 @@ class InfoCommand extends AbstractCommand
         $extensionKey = $input->getArgument('extensionKey');
         $version = $input->getOption('version');
 
-	    $extensionsXmlService = new \etobi\extensionUtils\Service\ExtensionsXml();
+	    $extensionsXmlService = new ExtensionsXml();
 	    try {
 		    $extensionsXmlService->isFileValid();
 	    } catch(\InvalidArgumentException $e) {
@@ -81,7 +101,7 @@ class InfoCommand extends AbstractCommand
     protected function executeExtensionInfo(InputInterface $input, OutputInterface $output) {
         $extensionKey = $input->getArgument('extensionKey');
 
-        $extensionsXmlService = new \etobi\extensionUtils\Service\ExtensionsXml();
+        $extensionsXmlService = new ExtensionsXml();
         $versionInfos = $extensionsXmlService->getExtensionInfo($extensionKey);
 
         $this->printExtensionInfo($versionInfos);
@@ -153,7 +173,7 @@ class InfoCommand extends AbstractCommand
         $extensionKey = $input->getArgument('extensionKey');
         $version = $input->getOption('version');
 
-        $extensionsXmlService = new \etobi\extensionUtils\Service\ExtensionsXml();
+        $extensionsXmlService = new ExtensionsXml();
         $infos = $extensionsXmlService->getVersionInfo($extensionKey, $version);
 
         $this->printVersionInfo($infos);
