@@ -1,6 +1,7 @@
 <?php
 
 namespace etobi\extensionUtils\T3oSoap;
+use etobi\extensionUtils\T3oSoap\Exception\ExtensionKeyNotValidException;
 
 /**
  * check if a given extension key is available
@@ -27,7 +28,7 @@ class CheckExtensionKeyRequest extends AbstractAuthenticatedRequest {
         } elseif($result['resultCode'] == self::TX_TER_RESULT_EXTENSIONKEYALREADYEXISTS) {
             return FALSE;
         } elseif($result['resultCode'] == self::TX_TER_RESULT_EXTENSIONKEYNOTVALID) {
-            throw new \etobi\extensionUtils\T3oSoap\Exception\ExtensionKeyNotValidException(sprintf(
+            throw new ExtensionKeyNotValidException(sprintf(
                 '"%s" is not a valid extension key',
                 $extensionKey
             ));

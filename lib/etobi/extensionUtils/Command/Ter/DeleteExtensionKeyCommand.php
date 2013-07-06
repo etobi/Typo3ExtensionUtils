@@ -4,6 +4,8 @@ namespace etobi\extensionUtils\Command\Ter;
 
 use etobi\extensionUtils\Controller\SelfController;
 
+use etobi\extensionUtils\T3oSoap\Exception\ExtensionKeyNotExistsException;
+use etobi\extensionUtils\T3oSoap\Exception\ExtensionKeyNotValidException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -27,9 +29,28 @@ class DeleteExtensionKeyCommand extends AbstractAuthenticatedTerCommand
             ->setDefinition(array(
                 new InputArgument('extensionKey', InputArgument::OPTIONAL, 'the extension key to delete'),
             ))
-            ->setDescription('Delete a given extension key on typo3.org')
-            //@TODO: longer help text
-//            ->setHelp()
+            ->setDescription('Delete a given extension key')
+            ->setHelp(<<<EOT
+Delete an extension key without any uploads.
+
+After deleting the key is available for registration by anyone again.
+You can not delete extension keys that have uploaded versions.
+
+Example
+=======
+
+Delete extension key "my_extension"
+
+  t3xutils ter:delete-key my_extension
+
+Return codes
+============
+
+* `0` if the key is available for registration
+* `1` if the key is already registered
+* `2` if the key is formally invalid
+EOT
+)
         ;
         $this->configureSoapOptions();
         $this->configureCredentialOptions();
@@ -37,7 +58,6 @@ class DeleteExtensionKeyCommand extends AbstractAuthenticatedTerCommand
 
     protected function prepareParameters(InputInterface $input, OutputInterface $output)
     {
-        parent::prepareParameters($input, $output);
         if(!$input->getArgument('extensionKey')) {
 
             $extensionKey = $this->getDialogHelper()->ask(
@@ -47,6 +67,7 @@ class DeleteExtensionKeyCommand extends AbstractAuthenticatedTerCommand
             $this->logger->debug(sprintf('interactively asked for extension key. "%s" given', $extensionKey));
             $input->setArgument('extensionKey', $extensionKey);
         }
+	    parent::prepareParameters($input, $output);
     }
 
     /**
@@ -55,20 +76,19 @@ class DeleteExtensionKeyCommand extends AbstractAuthenticatedTerCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $extensionKey = $input->getArgument('extensionKey');
-        $checkRequest = $this->getRequestObject('\\etobi\\extensionUtils\\T3oSoap\\DeleteExtensionKeyRequest');
+	    /** @var \etobi\extensionUtils\T3oSoap\DeleteExtensionKeyRequest $checkRequest */
+	    $checkRequest = $this->getRequestObject('\\etobi\\extensionUtils\\T3oSoap\\DeleteExtensionKeyRequest');
         try {
-            $result = $checkRequest->deleteExtensionKey($extensionKey);
+            $checkRequest->deleteExtensionKey($extensionKey);
 
-            if($result) {
-                $output->writeln(sprintf('"%s" successfully deleted', $extensionKey));
-                return 0;
-            } else {
-                $output->writeln(sprintf('<error>"%s" could not be deleted</error>', $extensionKey));
-                return 1;
-            }
-        } catch (\etobi\extensionUtils\T3oSoap\Exception\ExtensionKeyNotValidException $e) {
+            $output->writeln(sprintf('"%s" successfully deleted', $extensionKey));
+            return 0;
+        } catch(ExtensionKeyNotExistsException $e) {
+	        $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+	        return 1;
+        } catch (ExtensionKeyNotValidException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
-            return 1;
+            return 2;
         }
     }
 }

@@ -4,6 +4,7 @@ namespace etobi\extensionUtils\Command\Ter;
 
 use etobi\extensionUtils\Controller\SelfController;
 
+use etobi\extensionUtils\T3oSoap\Exception\ExtensionKeyNotValidException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,13 +26,34 @@ class RegisterExtensionKeyCommand extends AbstractAuthenticatedTerCommand
         $this
             ->setName('ter:register-key')
             ->setDefinition(array(
-                new InputArgument('extensionKey', InputArgument::OPTIONAL, 'the extension key to check'),
+                new InputArgument('extensionKey', InputArgument::OPTIONAL, 'the extension key to register'),
                 new InputOption('title', NULL, InputOption::VALUE_REQUIRED, 'title string to set', ''),
                 new InputOption('description', NULL, InputOption::VALUE_REQUIRED, 'description string to set', ''),
             ))
-            ->setDescription('Registers a given extension key on typo3.org')
-            //@TODO: longer help text
-//            ->setHelp()
+            ->setDescription('Registers a given extension key')
+            ->setHelp(<<<EOT
+Register an extension key
+
+Example
+=======
+
+Register extension key "my_extension"
+
+  t3xutils ter:register-key my_extension
+
+Register extension key "my_extension" and set title and description
+
+  t3xutils ter:register-key my_extension --title="Hello World" --description="This is my newest extension"
+
+Return codes
+============
+
+* `0` if the key is registered
+* `1` if the key could not be registered
+* `2` if the key is formally invalid
+
+EOT
+)
         ;
         $this->configureSoapOptions();
         $this->configureCredentialOptions();
@@ -39,7 +61,6 @@ class RegisterExtensionKeyCommand extends AbstractAuthenticatedTerCommand
 
     protected function prepareParameters(InputInterface $input, OutputInterface $output)
     {
-        parent::prepareParameters($input, $output);
         if(!$input->getArgument('extensionKey')) {
 
             $extensionKey = $this->getDialogHelper()->ask(
@@ -49,6 +70,7 @@ class RegisterExtensionKeyCommand extends AbstractAuthenticatedTerCommand
             $this->logger->debug(sprintf('interactively asked for extension key. "%s" given', $extensionKey));
             $input->setArgument('extensionKey', $extensionKey);
         }
+	    parent::prepareParameters($input, $output);
     }
 
     /**
@@ -57,9 +79,10 @@ class RegisterExtensionKeyCommand extends AbstractAuthenticatedTerCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $extensionKey = $input->getArgument('extensionKey');
-        $checkRequest = $this->getRequestObject('\\etobi\\extensionUtils\\T3oSoap\\RegisterExtensionKeyRequest');
+	    /** @var \etobi\extensionUtils\T3oSoap\RegisterExtensionKeyRequest $registerRequest */
+        $registerRequest = $this->getRequestObject('\\etobi\\extensionUtils\\T3oSoap\\RegisterExtensionKeyRequest');
         try {
-            $result = $checkRequest->registerExtensionKey(
+            $result = $registerRequest->registerExtensionKey(
                 $extensionKey,
                 $input->getOption('title'),
                 $input->getOption('description')
@@ -72,9 +95,9 @@ class RegisterExtensionKeyCommand extends AbstractAuthenticatedTerCommand
                 $output->writeln(sprintf('<error>"%s" is already taken</error>', $extensionKey));
                 return 1;
             }
-        } catch (\etobi\extensionUtils\T3oSoap\Exception\ExtensionKeyNotValidException $e) {
-            $output->writeln(sprintf('<error>"%s" is not formally valid as extension key and cannot be registered</error>', $extensionKey));
-            return 1;
+        } catch (ExtensionKeyNotValidException $e) {
+            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            return 2;
         }
     }
 }
