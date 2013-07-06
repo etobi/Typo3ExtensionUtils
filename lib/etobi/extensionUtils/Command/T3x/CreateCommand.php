@@ -26,16 +26,68 @@ class CreateCommand extends AbstractCommand
         $this
             ->setName('t3x:create')
             ->setDefinition(array(
-                new InputArgument('extensionKey', InputArgument::REQUIRED, 'extension key'),
-                new InputArgument('sourcePath', InputArgument::REQUIRED, 'path of the extension'),
-                new InputArgument('t3xFile', InputArgument::REQUIRED, 'filename and path to store the t3x file'),
+		        new InputArgument('sourcePath', InputArgument::REQUIRED, 'path of the extension'),
+		        new InputArgument('t3xFile', InputArgument::OPTIONAL, 'filename and path to store the t3x file'),
+                new InputOption('extensionKey', NULL, InputOption::VALUE_REQUIRED, 'extension key'),
                 new InputOption('force', 'f', InputOption::VALUE_NONE, 'force override if the file already exists')
             ))
             ->setDescription('Create a t3x file')
-            //@TODO: longer help text
-//            ->setHelp()
+            ->setHelp(<<<EOT
+Create a t3x file from a local folder
+
+Example
+=======
+
+Create a t3x for extension "my_extension" from the contents of the "my_extension/"
+folder and store the content as my_extension.t3x
+
+  t3xutils t3x:create my_extension/
+
+Create or override the file "latest.t3x" with the contents of the "dev/" folder
+
+  t3xutils t3x:create -f --extensionKey="my_extension" dev/ latest.t3x
+EOT
+)
         ;
     }
+
+	protected function prepareParameters(InputInterface $input, OutputInterface $output) {
+		$path = $input->getArgument('sourcePath');
+		if(!file_exists($path)) {
+			throw new \InvalidArgumentException(sprintf(
+				'folder "%s" does not exist',
+				$path
+			));
+		} elseif(!is_dir($path)) {
+			throw new \InvalidArgumentException(sprintf(
+				'"%s" is not a directory',
+				$path
+			));
+		}
+		if(!$input->getArgument('t3xFile')) {
+			$t3xFile = basename($path);
+			if(empty($t3xFile)) {
+				$t3xFile = basename(getcwd());
+			}
+			$t3xFile .= '.t3x';
+			$input->setArgument('t3xFile', $t3xFile);
+			$this->logger->info(sprintf(
+				'No t3x file given. Using %s.',
+				$t3xFile
+			));
+		}
+		if(!$input->getOption('extensionKey')) {
+			$extensionKey = basename($path);
+			if(empty($extensionKey)) {
+				$extensionKey = basename(getcwd());
+			}
+			$input->setOption('extensionKey', $extensionKey);
+			$this->logger->info(sprintf(
+				'No extensionKey given. Asuming %s.',
+				$extensionKey
+			));
+		}
+	}
 
     /**
      * {@inheritdoc}
@@ -50,7 +102,7 @@ class CreateCommand extends AbstractCommand
 
         $t3xFileService = new T3xFile();
         $success = $t3xFileService->create(
-            $input->getArgument('extensionKey'),
+            $input->getOption('extensionKey'),
             $input->getArgument('sourcePath'),
             $t3xFile
         );
