@@ -3,12 +3,11 @@
 namespace etobi\extensionUtils\Command\EmConf;
 
 use etobi\extensionUtils\Command\AbstractCommand;
-use Symfony\Component\Console\Command\Command;
+use etobi\extensionUtils\Service\EmConf;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use etobi\extensionUtils\Service\T3xFile;
 
 /**
  * EmconfUpdateCommand updates information in an ext_emconf.php file
@@ -26,7 +25,7 @@ class UpdateCommand extends AbstractCommand
         $this
             ->setName('emconf:update')
             ->setDefinition(array(
-                new InputArgument('emconfFile', InputArgument::REQUIRED, 'path to the ext_emconf.php file'),
+                new InputArgument('emconfFile', InputArgument::REQUIRED, 'path to the ext_emconf.php file or a folder with this file'),
                 new InputOption('title', NULL, InputOption::VALUE_REQUIRED, 'title string to set'),
                 new InputOption('description', NULL, InputOption::VALUE_REQUIRED, 'description string to set'),
                 new InputOption('author', NULL, InputOption::VALUE_REQUIRED, 'author string to set'),
@@ -37,21 +36,33 @@ class UpdateCommand extends AbstractCommand
             ))
             ->setDescription('Update an ext_emconf.php file')
             //@TODO: longer help text
-//            ->setHelp()
+            ->setHelp(<<<EOT
+Update an ext_emconf.php file
+
+Example
+=======
+
+  t3xutils emconf:update --version="1.2.3" --state="stable" my_extension/ext_emconf.php
+EOT
+)
         ;
     }
 
-    protected function prepareParameters(InputInterface $input, OutputInterface $output) {
+	/**
+	 * @param InputInterface $input
+	 * @param OutputInterface $output
+	 * @return int|void
+	 */
+	protected function prepareParameters(InputInterface $input, OutputInterface $output) {
         if(!is_file($input->getArgument('emconfFile'))) {
             $this->logger->debug(sprintf('"%s" is not a file', $input->getArgument('emconfFile')));
             $emconfFileName = rtrim($input->getArgument('emconfFile'), '/') . DIRECTORY_SEPARATOR . 'ext_emconf.php';
             if(!is_file($emconfFileName)) {
-                $this->logger->critical(sprintf(
+	            throw new \InvalidArgumentException(sprintf(
                     'Neither "%s" nor "%s" is a file.',
                     $input->getArgument('emconfFile'),
                     $emconfFileName
                 ));
-                return 1;
             } else {
                 $input->setArgument('emconfFile', $emconfFileName);
             }
@@ -63,7 +74,7 @@ class UpdateCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $emconf = new \etobi\extensionUtils\Service\EmConf();
+        $emconf = new EmConf();
         $emconf->readFile($input->getArgument('emconfFile'));
 
         if($input->getOption('title')) {
@@ -95,9 +106,7 @@ class UpdateCommand extends AbstractCommand
             $this->logger->info(sprintf('state set to "%s"', $input->getOption('state')));
         }
 
-        $success = $emconf->writeFile();
-        if($success) {
-            $output->writeln(sprintf('"%s" updated', $input->getArgument('emconfFile')));
-        }
+        $emconf->writeFile();
+        $output->writeln(sprintf('"%s" updated', $input->getArgument('emconfFile')));
     }
 }
