@@ -1,15 +1,14 @@
 <?php
 
-namespace etobi\extensionUtils\Command;
+namespace etobi\extensionUtils\Command\Ter;
 
+use etobi\extensionUtils\Command\AbstractCommand;
 use etobi\extensionUtils\Controller\TerController;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
 use etobi\extensionUtils\Service\Filesystem;
 
 /**
@@ -26,7 +25,7 @@ class UpdateInfoCommand extends AbstractCommand
     protected function configure()
     {
         $this
-            ->setName('updateinfo')
+            ->setName('ter:update-info')
             ->setDefinition(array())
             ->setDescription('Update local extension information cache')
             //@TODO: longer help text

@@ -1,7 +1,8 @@
 <?php
 
-namespace etobi\extensionUtils\Command;
+namespace etobi\extensionUtils\Command\EmConf;
 
+use etobi\extensionUtils\Command\AbstractCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -14,7 +15,7 @@ use etobi\extensionUtils\Service\T3xFile;
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class EmconfUpdateCommand extends AbstractCommand
+class UpdateCommand extends AbstractCommand
 {
 
     /**

@@ -1,7 +1,9 @@
 <?php
 
-namespace etobi\extensionUtils\Command;
+namespace etobi\extensionUtils\Command\Self;
 
+use etobi\extensionUtils\Command\AbstractCommand;
+use etobi\extensionUtils\ConsoleUtility\ConsoleOutputLoggerProxy;
 use etobi\extensionUtils\Controller\SelfController;
 
 use Symfony\Component\Console\Command\Command;
@@ -11,11 +13,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * TerPingCommand checks SOAP API connectivity
+ * CheckForUpdateCommand checks if an update of t3xutils is available
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class TerPingCommand extends AbstractTerCommand
+class CheckUpdateCommand extends AbstractCommand
 {
 
     /**
@@ -24,13 +26,12 @@ class TerPingCommand extends AbstractTerCommand
     protected function configure()
     {
         $this
-            ->setName('ter:ping')
+            ->setName('self:check-update')
             ->setDefinition(array())
-            ->setDescription('Check SOAP API connectivity')
+            ->setDescription('Check if an update for t3xutils is available')
             //@TODO: longer help text
 //            ->setHelp()
         ;
-        $this->configureSoapOptions();
     }
 
     /**
@@ -38,13 +39,9 @@ class TerPingCommand extends AbstractTerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $pingRequest = $this->getRequestObject('\\etobi\\extensionUtils\\T3oSoap\\PingRequest');
-        if($pingRequest->isApiWorking()) {
-            $output->writeln('The API is working.');
-            return 0;
-        } else {
-            $output->writeln('<error>The API is not working.</error>');
-            return 1;
-        }
+        $logger = new ConsoleOutputLoggerProxy($output);
+        $controller = new SelfController();
+        $controller->setLogger($logger);
+        $controller->checkForUpdateAction();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace etobi\extensionUtils\Command;
+namespace etobi\extensionUtils\Command\Ter;
 
 use etobi\extensionUtils\Controller\SelfController;
 
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class TerSearchUserCommand extends AbstractAuthenticatedTerCommand
+class SearchUserCommand extends AbstractAuthenticatedTerCommand
 {
 
 	/**

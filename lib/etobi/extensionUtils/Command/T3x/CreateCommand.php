@@ -1,15 +1,13 @@
 <?php
 
-namespace etobi\extensionUtils\Command;
+namespace etobi\extensionUtils\Command\T3x;
 
-use etobi\extensionUtils\Controller\T3xController;
+use etobi\extensionUtils\Command\AbstractCommand;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
 use etobi\extensionUtils\Service\T3xFile;
 
 /**
@@ -17,7 +15,7 @@ use etobi\extensionUtils\Service\T3xFile;
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class T3xCreateCommand extends AbstractCommand
+class CreateCommand extends AbstractCommand
 {
 
     /**

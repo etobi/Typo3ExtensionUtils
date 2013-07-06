@@ -1,12 +1,12 @@
 <?php
 
-namespace etobi\extensionUtils\Command;
+namespace etobi\extensionUtils\Command\T3x;
 
+use etobi\extensionUtils\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
 use etobi\extensionUtils\Service\T3xFile;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -15,7 +15,7 @@ use Symfony\Component\Filesystem\Filesystem;
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class T3xExtractCommand extends AbstractCommand
+class ExtractCommand extends AbstractCommand
 {
 
     /**

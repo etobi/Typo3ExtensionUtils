@@ -1,6 +1,6 @@
 <?php
 
-namespace etobi\extensionUtils\Command;
+namespace etobi\extensionUtils\Command\Ter;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class TerUploadCommand extends AbstractAuthenticatedTerCommand
+class UploadCommand extends AbstractAuthenticatedTerCommand
 {
 
     /**

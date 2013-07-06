@@ -1,13 +1,9 @@
 <?php
 
-namespace etobi\extensionUtils\Command;
+namespace etobi\extensionUtils\Command\Ter;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use etobi\extensionUtils\ConsoleUtility\ConsoleOutputLoggerProxy;
+use etobi\extensionUtils\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputOption;
-use Psr\Log\LoggerInterface;
-use etobi\extensionUtils\ConsoleUtility\FileSizeProgressBar;
 
 /**
  * @author Christian Zenker <christian.zenker@599media.de>

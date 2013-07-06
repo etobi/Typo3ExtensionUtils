@@ -1,6 +1,6 @@
 <?php
 
-namespace etobi\extensionUtils\Command;
+namespace etobi\extensionUtils\Command\Ter;
 
 use etobi\extensionUtils\Controller\SelfController;
 
@@ -9,28 +9,28 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
 
 /**
- * SelfUpdateCommand updates t3xutils
+ * TerPingCommand checks SOAP API connectivity
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class SelfUpdateCommand extends AbstractCommand
+class PingCommand extends AbstractTerCommand
 {
-    
+
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
         $this
-            ->setName('selfupdate')
+            ->setName('ter:ping')
             ->setDefinition(array())
-            ->setDescription('Update t3xutils')
+            ->setDescription('Check SOAP API connectivity')
             //@TODO: longer help text
 //            ->setHelp()
         ;
+        $this->configureSoapOptions();
     }
 
     /**
@@ -38,9 +38,13 @@ class SelfUpdateCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $logger = new ConsoleOutputLoggerProxy($output);
-        $controller = new SelfController();
-        $controller->setLogger($output);
-        $controller->updateAction();
+        $pingRequest = $this->getRequestObject('\\etobi\\extensionUtils\\T3oSoap\\PingRequest');
+        if($pingRequest->isApiWorking()) {
+            $output->writeln('The API is working.');
+            return 0;
+        } else {
+            $output->writeln('<error>The API is not working.</error>');
+            return 1;
+        }
     }
 }

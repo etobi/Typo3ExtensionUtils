@@ -1,7 +1,9 @@
 <?php
 
-namespace etobi\extensionUtils\Command;
+namespace etobi\extensionUtils\Command\Self;
 
+use etobi\extensionUtils\Command\AbstractCommand;
+use etobi\extensionUtils\ConsoleUtility\ConsoleOutputLoggerProxy;
 use etobi\extensionUtils\Controller\SelfController;
 
 use Symfony\Component\Console\Command\Command;
@@ -9,25 +11,24 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use etobi\extensionUtils\Proxy\ConsoleOutputLoggerProxy;
 
 /**
- * CheckForUpdateCommand checks if an update of t3xutils is available
+ * SelfUpdateCommand updates t3xutils
  *
  * @author Christian Zenker <christian.zenker@599media.de>
  */
-class CheckForUpdateCommand extends AbstractCommand
+class UpdateCommand extends AbstractCommand
 {
-
+    
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
         $this
-            ->setName('checkforupdate')
+            ->setName('self:update')
             ->setDefinition(array())
-            ->setDescription('Check if an update for t3xutils is available')
+            ->setDescription('Update t3xutils')
             //@TODO: longer help text
 //            ->setHelp()
         ;
@@ -40,7 +41,7 @@ class CheckForUpdateCommand extends AbstractCommand
     {
         $logger = new ConsoleOutputLoggerProxy($output);
         $controller = new SelfController();
-        $controller->setLogger($logger);
-        $controller->checkForUpdateAction();
+        $controller->setLogger($output);
+        $controller->updateAction();
     }
 }
