@@ -30,8 +30,23 @@ class SearchExtensionKeyCommand extends AbstractAuthenticatedTerCommand
 				new InputOption('width', NULL, InputOption::VALUE_OPTIONAL, 'maximum display width in columns', 80),
 			))
 			->setDescription('Search an extension by extension key')
-			//@TODO: longer help text
-//            ->setHelp()
+            ->setHelp(<<<EOT
+Search an extension by extension key
+
+This command can be used to see what user registered an extension key even if no version has been uploaded.
+
+Example
+=======
+
+Get information on "my_extension"
+
+  t3xutils ter:search:extension-key my_extension
+
+Find all extension keys that start with "my_"
+
+  t3xutils ter:search:my_extension "my_*"
+EOT
+)
 		;
 		$this->configureSoapOptions();
 		$this->configureCredentialOptions();
@@ -65,6 +80,9 @@ class SearchExtensionKeyCommand extends AbstractAuthenticatedTerCommand
 			'--extensionKey' => $input->getArgument('extensionKey'),
 			'--width' => $input->getOption('width'),
 		);
+		if($input->getOption('wsdl')) {
+			$arguments['--wsdl'] = $input->getOption('wsdl');
+		}
 
 		$input = new ArrayInput($arguments);
 		return $command->run($input, $output);
