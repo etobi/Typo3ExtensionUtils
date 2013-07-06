@@ -2,6 +2,7 @@
 
 namespace etobi\extensionUtils\Command\Ter;
 
+use etobi\extensionUtils\ter\TerUpload;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,8 +30,24 @@ class UploadCommand extends AbstractAuthenticatedTerCommand
                 new InputOption('comment', 'c', InputOption::VALUE_REQUIRED, 'Brief description what has changed with this version'),
             ))
             ->setDescription('Upload an extension to TER')
-            //@TODO: longer help text
-//            ->setHelp()
+            ->setHelp(<<<EOT
+Upload an extension to TER.
+
+<comment>Warning</comment>: This command does not increase the version number of the extension.
+You should use emconf:update beforehand.
+
+Example
+=======
+
+Upload the extension "my_extension" in a folder with the same name to TER.
+
+  t3xutils ter:upload my_extension
+
+Upload the extension "my_extension" from the folder "dev"
+
+  t3xutils ter:upload dev my_extension
+EOT
+)
         ;
         $this->configureSoapOptions();
         $this->configureCredentialOptions();
@@ -69,7 +86,9 @@ class UploadCommand extends AbstractAuthenticatedTerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $upload = new \etobi\extensionUtils\ter\TerUpload();
+	    // @todo: move this to T3oSoap
+        $upload = new TerUpload();
+
         $upload->setExtensionKey($input->getArgument('extensionKey'))
             ->setUsername($input->getOption('username'))
             ->setPassword($input->getOption('password'))
