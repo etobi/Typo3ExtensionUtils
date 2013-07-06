@@ -30,8 +30,17 @@ class SearchUserCommand extends AbstractAuthenticatedTerCommand
 				new InputOption('width', NULL, InputOption::VALUE_OPTIONAL, 'maximum display width in columns', 80),
 			))
 			->setDescription('Search an extension by username')
-			//@TODO: longer help text
-//            ->setHelp()
+            ->setHelp(<<<EOT
+Search an extension key by user
+
+Example
+=======
+
+List all extension keys by user "kasper"
+
+  t3xutils ter:search:user kasper
+EOT
+)
 		;
 		$this->configureSoapOptions();
 		$this->configureCredentialOptions();
@@ -65,6 +74,9 @@ class SearchUserCommand extends AbstractAuthenticatedTerCommand
 			'--user' => $input->getArgument('user'),
 			'--width' => $input->getOption('width'),
 		);
+		if($input->getOption('wsdl')) {
+			$arguments['--wsdl'] = $input->getOption('wsdl');
+		}
 
 		$input = new ArrayInput($arguments);
 		return $command->run($input, $output);
