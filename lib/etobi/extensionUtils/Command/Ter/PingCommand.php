@@ -27,8 +27,25 @@ class PingCommand extends AbstractTerCommand
             ->setName('ter:ping')
             ->setDefinition(array())
             ->setDescription('Check SOAP API connectivity')
-            //@TODO: longer help text
-//            ->setHelp()
+            ->setHelp(<<<EOT
+Check if the SOAP Api is responding.
+
+This command can be helpful to check if your customly configured TER repository is available.
+
+This command does not need any credentials.
+
+Example
+=======
+
+Check if the main repository on typo3.org is available
+
+  t3xutils ter:ping
+
+Check a custom repository on example.org
+
+  t3xutils ter:ping --wsdl="http://example.org/wsdl/tx_ter_wsdl.php"
+EOT
+)
         ;
         $this->configureSoapOptions();
     }
@@ -38,6 +55,7 @@ class PingCommand extends AbstractTerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+	    /** @var \etobi\extensionUtils\T3oSoap\PingRequest $pingRequest */
         $pingRequest = $this->getRequestObject('\\etobi\\extensionUtils\\T3oSoap\\PingRequest');
         if($pingRequest->isApiWorking()) {
             $output->writeln('The API is working.');
