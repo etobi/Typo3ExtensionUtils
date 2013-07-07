@@ -32,6 +32,13 @@ Check if your given username and password are valid credentials for typo3.org.
 Some commands form the ter:* namespace require a valid login on typo3.org.
 This command checks if your given credentials are valid.
 
+config.ini
+==========
+
+* <info>ter.username</info>: username on typo3.org
+* <info>ter.password</info>: password on typo3.org
+* <info>ter.wsdl</info>: wsdl url for the Soap API
+
 Example
 =======
 

@@ -43,6 +43,13 @@ Delete extension key "my_extension"
 
   t3xutils ter:delete-key my_extension
 
+config.ini
+==========
+
+* <info>ter.username</info>: username on typo3.org
+* <info>ter.password</info>: password on typo3.org
+* <info>ter.wsdl</info>: wsdl url for the Soap API
+
 Return codes
 ============
 
@@ -58,7 +65,7 @@ EOT
 
     protected function prepareParameters(InputInterface $input, OutputInterface $output)
     {
-        if(!$input->getArgument('extensionKey')) {
+        if(!$input->getArgument('extensionupdateinfoKey')) {
 
             $extensionKey = $this->getDialogHelper()->ask(
                 $output,

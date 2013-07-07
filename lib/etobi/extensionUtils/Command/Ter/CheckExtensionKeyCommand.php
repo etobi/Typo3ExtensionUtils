@@ -42,6 +42,13 @@ Check if the extension key "my_extension" is valid and available for registratio
 
   t3xutils ter:check-key my_extension
 
+config.ini
+==========
+
+* <info>ter.username</info>: username on typo3.org
+* <info>ter.password</info>: password on typo3.org
+* <info>ter.wsdl</info>: wsdl url for the Soap API
+
 Return codes
 ============
 

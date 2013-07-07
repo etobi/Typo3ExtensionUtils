@@ -45,6 +45,13 @@ Get information on "my_extension"
 Find all extension keys that start with "my_"
 
   t3xutils ter:search:my_extension "my_*"
+
+config.ini
+==========
+
+* <info>ter.username</info>: username on typo3.org
+* <info>ter.password</info>: password on typo3.org
+* <info>ter.wsdl</info>: wsdl url for the Soap API
 EOT
 )
 		;

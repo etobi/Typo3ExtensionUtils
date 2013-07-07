@@ -46,6 +46,13 @@ Upload the extension "my_extension" in a folder with the same name to TER.
 Upload the extension "my_extension" from the folder "dev"
 
   t3xutils ter:upload dev my_extension
+
+config.ini
+==========
+
+* <info>ter.username</info>: username on typo3.org
+* <info>ter.password</info>: password on typo3.org
+* <info>ter.wsdl</info>: wsdl url for the Soap API
 EOT
 )
         ;

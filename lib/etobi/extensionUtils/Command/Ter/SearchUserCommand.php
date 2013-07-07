@@ -39,6 +39,13 @@ Example
 List all extension keys by user "kasper"
 
   t3xutils ter:search:user kasper
+
+config.ini
+==========
+
+* <info>ter.username</info>: username on typo3.org
+* <info>ter.password</info>: password on typo3.org
+* <info>ter.wsdl</info>: wsdl url for the Soap API
 EOT
 )
 		;
