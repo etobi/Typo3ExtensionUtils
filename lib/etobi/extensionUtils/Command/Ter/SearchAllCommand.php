@@ -55,6 +55,13 @@ Show all extensions by the user "john.doe" that have "news" in their description
 * <info>ter.password</info>: password on typo3.org
 * <info>ter.wsdl</info>: wsdl url for the Soap API
 
+Example
+=======
+
+Search all extensions that have a description mentioning "tt_news" and are created by "rupi"
+
+  t3xutils ter:search:all --description="*tt_news*" --user="rupi"
+
 EOT
 )
 		;
