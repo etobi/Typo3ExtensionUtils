@@ -29,7 +29,7 @@ class InfoCommand extends AbstractCommand
             ->setName('ter:info')
             ->setDefinition(array(
                 new InputArgument('extensionKey', InputArgument::REQUIRED, 'the extension key you want information on'),
-                new InputOption('version', NULL, InputOption::VALUE_REQUIRED, 'get information on an specific version'),
+                new InputArgument('version', InputArgument::OPTIONAL, 'get information on an specific version'),
                 new InputOption('latest', 'l', InputOption::VALUE_NONE, 'get information on the latest version if non is specified'),
                 new InputOption('width', NULL, InputOption::VALUE_OPTIONAL, 'maximum display width in columns', 80),
             ))
@@ -52,7 +52,7 @@ Show detailed information on the latest version of "my_extension"
 
 Show detailed information on version "1.2.3" of "my_extension"
 
-  t3xutils ter:info --version="1.2.3" my_extension
+  t3xutils ter:info my_extension 1.2.3
 EOT
 )
         ;
@@ -64,7 +64,7 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $extensionKey = $input->getArgument('extensionKey');
-        $version = $input->getOption('version');
+        $version = $input->getArgument('version');
 
 	    $extensionsXmlService = new ExtensionsXml();
 	    try {
@@ -171,7 +171,7 @@ EOT
      */
     protected function executeVersionInfo(InputInterface $input, OutputInterface $output) {
         $extensionKey = $input->getArgument('extensionKey');
-        $version = $input->getOption('version');
+        $version = $input->getArgument('version');
 
         $extensionsXmlService = new ExtensionsXml();
         $infos = $extensionsXmlService->getVersionInfo($extensionKey, $version);
