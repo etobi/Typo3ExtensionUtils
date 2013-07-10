@@ -45,8 +45,8 @@ Check a custom repository on example.org
 
   t3xutils ter:ping --wsdl="http://example.org/wsdl/tx_ter_wsdl.php"
 
-config.ini
-==========
+.t3xuconfig
+===========
 
 * <info>ter.wsdl</info>: wsdl url for the Soap API
 EOT

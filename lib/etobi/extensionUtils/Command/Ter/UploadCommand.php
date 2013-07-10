@@ -47,8 +47,8 @@ Upload the extension "my_extension" from the folder "dev"
 
   t3xutils ter:upload dev my_extension
 
-config.ini
-==========
+.t3xuconfig
+===========
 
 * <info>ter.username</info>: username on typo3.org
 * <info>ter.password</info>: password on typo3.org

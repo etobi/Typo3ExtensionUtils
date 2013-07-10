@@ -45,8 +45,8 @@ Register extension key "my_extension" and set title and description
 
   t3xutils ter:register-key my_extension --title="Hello World" --description="This is my newest extension"
 
-config.ini
-==========
+.t3xuconfig
+===========
 
 * <info>ter.username</info>: username on typo3.org
 * <info>ter.password</info>: password on typo3.org

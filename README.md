@@ -63,9 +63,9 @@ To show help on a command and all available arguments and options
 
 	./t3xutils.php help [command]
 
-## config.ini
+## .t3xuconfig
 
-To allow easy scripting you can create a `config.ini` file with default settings for some parameters.
+To allow easy scripting you can create a `.t3xuconfig` file with default settings for some parameters.
 The file has to be in the folder where you execute the command.
 
 The following parameters are currently supported and unless you override them with the command call:

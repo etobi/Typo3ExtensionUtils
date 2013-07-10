@@ -48,8 +48,8 @@ Show all extensions by the user "john.doe" that have "news" in their description
 
   t3xutils ter:search:all --user="john.doe" --title="*news*"
 
-config.ini
-==========
+.t3xuconfig
+===========
 
 * <info>ter.username</info>: username on typo3.org
 * <info>ter.password</info>: password on typo3.org

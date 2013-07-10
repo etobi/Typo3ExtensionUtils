@@ -1,4 +1,4 @@
 .*
 !.git*
-config.ini
+!.t3xuconfig.example
 pharVersion.txt

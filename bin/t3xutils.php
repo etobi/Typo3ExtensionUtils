@@ -12,7 +12,7 @@ $console->setVersion(defined('T3XUTILS_VERSION') ? constant('T3XUTILS_VERSION') 
 // add a helper set that handles configuration
 $config = new \etobi\extensionUtils\ConsoleHelper\ConfigHelper();
 // @todo more formats, configurable location
-$configFileName = __DIR__ . '/../config.ini';
+$configFileName = __DIR__ . '/../.t3xuconfig';
 if(file_exists($configFileName) && is_readable($configFileName)) {
     $config->mergeConfiguration(parse_ini_file($configFileName, true));
 }

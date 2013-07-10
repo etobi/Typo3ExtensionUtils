@@ -40,8 +40,8 @@ List all extension keys by user "kasper"
 
   t3xutils ter:search:user kasper
 
-config.ini
-==========
+.t3xuconfig
+===========
 
 * <info>ter.username</info>: username on typo3.org
 * <info>ter.password</info>: password on typo3.org

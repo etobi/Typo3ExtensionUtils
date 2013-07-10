@@ -46,8 +46,8 @@ Find all extension keys that start with "my_"
 
   t3xutils ter:search:my_extension "my_*"
 
-config.ini
-==========
+.t3xuconfig
+===========
 
 * <info>ter.username</info>: username on typo3.org
 * <info>ter.password</info>: password on typo3.org

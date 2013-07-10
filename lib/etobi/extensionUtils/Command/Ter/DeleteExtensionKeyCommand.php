@@ -43,8 +43,8 @@ Delete extension key "my_extension"
 
   t3xutils ter:delete-key my_extension
 
-config.ini
-==========
+.t3xuconfig
+===========
 
 * <info>ter.username</info>: username on typo3.org
 * <info>ter.password</info>: password on typo3.org

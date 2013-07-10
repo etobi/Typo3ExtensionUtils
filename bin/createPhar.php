@@ -27,9 +27,9 @@ try {
 Phar::mapPhar("t3xutils.phar");
 define("T3XUTILS_VERSION", "' . $sha1 . '");
 define("T3XUTILS_TIMESTAMP", "' . date('c') . '");
-$configFile = getcwd() . DIRECTORY_SEPARATOR . "config.ini";
+$configFile = getcwd() . DIRECTORY_SEPARATOR . ".t3xuconfig";
 if (file_exists($configFile)) {
-    Phar::mount("config.ini", $configFile);
+    Phar::mount(".t3xuconfig", $configFile);
 }
 
 
