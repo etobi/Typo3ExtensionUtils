@@ -65,7 +65,7 @@ EOT
 
     protected function prepareParameters(InputInterface $input, OutputInterface $output)
     {
-        if(!$input->getArgument('extensionupdateinfoKey')) {
+        if(!$input->getArgument('extensionKey')) {
 
             $extensionKey = $this->getDialogHelper()->ask(
                 $output,
