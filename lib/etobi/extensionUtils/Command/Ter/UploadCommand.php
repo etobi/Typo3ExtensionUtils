@@ -102,6 +102,14 @@ EOT
             ->setUploadComment($input->getOption('comment'))
             ->setPath($input->getArgument('pathToExtension'));
 
+	    if($this->input->getOption('wsdl') || $this->getConfigurationValue('ter.wsdl')) {
+		    $wsdl = $this->input->getOption('wsdl') ?: $this->getConfigurationValue('ter.wsdl');
+		    $upload->setWsdlURL($wsdl);
+		    $this->logger->debug(sprintf('set "%s" as wsdl url', $wsdl));
+	    } else {
+		    $this->logger->debug(sprintf('use "%s" as wsdl url', $upload->getWsdlURL()));
+	    }
+
         try {
             $response = $upload->execute();
         } catch (\SoapFault $s) {

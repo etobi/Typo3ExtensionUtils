@@ -82,6 +82,7 @@ class TerUpload {
 		$this->checkRequirements();
 
 		$uploadRequest = new UploadRequest();
+		$uploadRequest->setWsdlURL($this->wsdlURL);
 		$uploadRequest->setCredentials($this->username, $this->password);
 		return $uploadRequest->upload(
 			$this->getExtensionData(),
