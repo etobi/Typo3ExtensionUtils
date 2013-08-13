@@ -44,6 +44,7 @@ class TerController {
 		$t3xFile = $extensionKey . '_' . $version . '.t3x';
 		$url = 'http://typo3.org/fileadmin/ter/' . $extensionKey{0} . '/' . $extensionKey{1} . '/' . $t3xFile;
 		exec('wget "' . $url . '" -O ' . ($destinationPath ?: '.') . '/' . $t3xFile);
+		return TRUE;
 	}
 
 	/**
@@ -54,6 +55,7 @@ class TerController {
 		echo 'fetch extension info ...' . chr(10);
 		$url = 'http://typo3.org/fileadmin/ter/extensions.xml.gz';
 		exec('wget "' . $url . '" -q -O - | gunzip > ' . $this->extensionsXmlFile);
+		return TRUE;
 	}
 
 	/**
@@ -112,6 +114,7 @@ class TerController {
 						chr(10);
 			}
 		}
+		return TRUE;
 	}
 
 	/**

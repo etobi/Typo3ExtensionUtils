@@ -44,6 +44,7 @@ class T3xController {
 			throw new \Exception('Error writing "' . $t3xFilePath . '"');
 		}
 		echo 'created "' . $t3xFilePath . '"' . chr(10);
+		return TRUE;
 	}
 
 	/**
@@ -71,6 +72,7 @@ class T3xController {
 		$this->writeFiles($extensionData['FILES'], $destinationPath);
 		$this->writeEmConf($extensionData['extKey'], $extensionData['EM_CONF'], $destinationPath);
 		echo 'extracted "' . $t3xFilePath . '" to "' . $destinationPath . '"' . chr(10);
+		return TRUE;
 	}
 
 	/**
@@ -84,6 +86,7 @@ class T3xController {
 
 		$extensionData = $this->extractExtensionDataFromT3x($t3xFilePath);
 		$this->listFiles($extensionData['FILES'], $fullDetails);
+		return TRUE;
 	}
 
 	/**
