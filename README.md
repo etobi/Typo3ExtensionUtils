@@ -1,5 +1,9 @@
 # TYPO3 Extension Utils
 
+> I'm currently not investing very much time into Typo3ExtensionUtils.
+> I really hope to merge back czenker's Version 2 (https://github.com/czenker/Typo3ExtensionUtils/tree/dev-2.0) at someday.
+> In the meanwhile I'll gladly review and accept any pull requests for Typo3ExtensionUtils.
+
 This is (or should get) a collection of CLI utilities for TYPO3 CMS Extension. Goal is to be able to do common tasks
 while developing extensions from the cli. All tools work without a fully functional TYPO3 installation. Actually the
 TYPO3 CMS core isn't needed at all for this utilities.
