@@ -60,6 +60,8 @@ Usage:
 Example:
 
 	./t3xutils.phar upload eTobi.de 'mySecretPassword' foobar "Minor Bugfixes and cleanup" /var/www/foobar/typo3conf/ext/foobar/
+	
+t3xutils *does not* increase the Version string in your ext_emconf by intention. You have to take care of that yourself.
 
 
 ### Display TER informations about an extension
