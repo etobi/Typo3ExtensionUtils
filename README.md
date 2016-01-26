@@ -93,3 +93,8 @@ t3xutils *does not* increase the Version string in your ext_emconf by intention.
 	# create a 'foobar.t3x' file for the EXT:foobar from the content of 'typo3conf/ext/foobar'
 	./t3xutils.phar create foobar typo3conf/ext/foobar foobar.t3x
 
+
+### Show metadata from .t3x file
+
+	./t3xutils.phar showmetadata ./foobar.t3x
+
