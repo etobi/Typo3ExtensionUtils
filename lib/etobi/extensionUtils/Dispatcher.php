@@ -68,6 +68,9 @@ class Dispatcher {
 			case 'listfiles':
 				$success = $this->listFilesCommand($arguments);
 				break;
+			case 'showmetadata':
+				$success = $this->showMetaDataCommand($arguments);
+				break;
 			case 'checkforupdate':
 				$success = $this->checkForUpdateCommand();
 				break;
@@ -104,6 +107,7 @@ class Dispatcher {
 			'upload' => 'upload <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>',
 			'extract' => 'extract <t3x-file> <destinationPath>',
 			'listfiles' => 'listfiles <t3x-file> [details]',
+			'showmetadata' => 'showmetadata <t3x-file>',
 			'create' => 'create <extensionKey> <sourcePath> <t3x-file>',
 			'checkforupdate' => 'checkforupdate',
 			'selfupdate' => 'selfupdate'
@@ -233,6 +237,22 @@ class Dispatcher {
 		$success = $controller->listFilesAction(
 			$arguments[0],
 			isset($arguments[1]) ? TRUE : FALSE
+		);
+		return $success;
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return bool
+	 */
+	protected function showMetaDataCommand($arguments) {
+		if (count($arguments) !== 1) {
+			return $this->helpCommand('showmetadata');
+		}
+
+		$controller = new \etobi\extensionUtils\Controller\T3xController();
+		$success = $controller->showMetaDataAction(
+			$arguments[0]
 		);
 		return $success;
 	}

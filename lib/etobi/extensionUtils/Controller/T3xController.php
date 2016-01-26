@@ -87,6 +87,19 @@ class T3xController {
 	}
 
 	/**
+	 * @param string $t3xFilePath
+	 * @throws \Exception
+	 */
+	public function showMetaDataAction($t3xFilePath) {
+		if (!file_exists($t3xFilePath) || !is_file($t3xFilePath) || !is_readable($t3xFilePath)) {
+			throw new \Exception('Cant read "' . $t3xFilePath . '"');
+		}
+
+		$extensionData = $this->extractExtensionDataFromT3x($t3xFilePath);
+		$this->showMetaData($extensionData['EM_CONF']);
+	}
+
+	/**
 	 * @param string $extKey
 	 * @param array $emConf
 	 * @param string $destinationPath
@@ -155,6 +168,19 @@ $EM_CONF[$_EXTKEY] = ' . var_export($emConf, TRUE) . ';
 				echo $info['content_md5'].' '.$info['size'].' '.utf8_decode($info['name']).PHP_EOL;
 			} else {
 				echo $info['name'].PHP_EOL;
+			}
+		}
+	}
+
+	/**
+	 * @param array $extensionData
+	 * @throws \Exception
+	 */
+	protected function showMetaData($extensionData) {
+		if (!is_array($extensionData)) return;
+		foreach ($extensionData as $keyword => $value) {
+			if(is_string($value) && !empty($value)) {
+				echo str_pad($keyword.':', 20, ' ', STR_PAD_RIGHT).' '.str_replace("\n", ' ', $value).PHP_EOL;
 			}
 		}
 	}
