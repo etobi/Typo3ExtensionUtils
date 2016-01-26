@@ -156,6 +156,7 @@ class TerUpload {
 				'lockType' => isset($emConf['lockType']) ? utf8_encode($emConf['lockType']) : '',
 				'doNotLoadInFE' => isset($emConf['doNotLoadInFE']) ? utf8_encode($emConf['doNotLoadInFE']) : '',
 				'docPath' => isset($emConf['docPath']) ? utf8_encode($emConf['docPath']) : '',
+				'autoload' => $this->getAutoloadArray(),
 			),
 			'infoData' => array(
 				'codeLines' => 0,
@@ -182,15 +183,31 @@ class TerUpload {
 	/**
 	 * @return array
 	 */
+	protected function getAutoloadArray() {
+		$emConf = $this->getEmConf();
+		if (isset($emConf['autoload'])) {
+			array_walk_recursive(
+					$emConf['autoload'],
+					function(&$v) {
+						$v = utf8_encode($v);
+					}
+			);
+			return $emConf['autoload'];
+		} else {
+			return array();
+		}
+	}
+
+	/**
+	 * @return array
+	 */
 	protected function getDependenciesArray() {
 		$emConf = $this->getEmConf();
 		$dependenciesArr = array();
 
 		if (isset($emConf['constraints']) && is_array($emConf['constraints'])) {
-			$extKeysArr = $emConf['constraints']['depends'];
-
-			if (is_array($extKeysArr)) {
-				foreach ($extKeysArr as $extKey => $version) {
+			if (is_array($emConf['constraints']) && isset($emConf['constraints']['depends'])) {
+				foreach ($emConf['constraints']['depends'] as $extKey => $version) {
 					if (strlen($extKey)) {
 						$dependenciesArr[] = array(
 							'kind' => 'depends',
@@ -201,9 +218,8 @@ class TerUpload {
 				}
 			}
 
-			$extKeysArr = $emConf['constraints']['conflicts'];
-			if (is_array($extKeysArr)) {
-				foreach ($extKeysArr as $extKey => $version) {
+			if (is_array($emConf['constraints']) && isset($emConf['constraints']['conflicts'])) {
+				foreach ($emConf['constraints']['conflicts'] as $extKey => $version) {
 					if (strlen($extKey)) {
 						$dependenciesArr[] = array(
 							'kind' => 'conflicts',

@@ -195,18 +195,16 @@ class Helper {
 		$filesData = array();
 		foreach ($fileArr as $filePath) {
 			$fileName = substr($filePath, strlen($path));
-			if ($fileName != 'ext_emconf.php') { // This file should be dynamically written...
-				$content = file_get_contents($filePath);
-				$filesData[utf8_encode($fileName)] = array(
-					'name' => utf8_encode($fileName),
-					'size' => intval(filesize($filePath)),
-					'modificationTime' => intval(filemtime($filePath)),
-					'isExecutable' => intval(is_executable($filePath)),
-					'content' => $content,
-					'contentMD5' => md5($content),
-					'content_md5' => md5($content),
-				);
-			}
+			$content = file_get_contents($filePath);
+			$filesData[utf8_encode($fileName)] = array(
+				'name' => utf8_encode($fileName),
+				'size' => intval(filesize($filePath)),
+				'modificationTime' => intval(filemtime($filePath)),
+				'isExecutable' => intval(is_executable($filePath)),
+				'content' => $content,
+				'contentMD5' => md5($content),
+				'content_md5' => md5($content),
+			);
 		}
 		return $filesData;
 	}
