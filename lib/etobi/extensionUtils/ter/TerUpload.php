@@ -206,10 +206,8 @@ class TerUpload {
 		$dependenciesArr = array();
 
 		if (isset($emConf['constraints']) && is_array($emConf['constraints'])) {
-			$extKeysArr = $emConf['constraints']['depends'];
-
-			if (is_array($extKeysArr)) {
-				foreach ($extKeysArr as $extKey => $version) {
+			if (is_array($emConf['constraints']) && isset($emConf['constraints']['depends'])) {
+				foreach ($emConf['constraints']['depends'] as $extKey => $version) {
 					if (strlen($extKey)) {
 						$dependenciesArr[] = array(
 							'kind' => 'depends',
@@ -220,9 +218,8 @@ class TerUpload {
 				}
 			}
 
-			$extKeysArr = $emConf['constraints']['conflicts'];
-			if (is_array($extKeysArr)) {
-				foreach ($extKeysArr as $extKey => $version) {
+			if (is_array($emConf['constraints']) && isset($emConf['constraints']['conflicts'])) {
+				foreach ($emConf['constraints']['conflicts'] as $extKey => $version) {
 					if (strlen($extKey)) {
 						$dependenciesArr[] = array(
 							'kind' => 'conflicts',
