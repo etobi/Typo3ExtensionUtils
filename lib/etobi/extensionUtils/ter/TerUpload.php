@@ -156,9 +156,7 @@ class TerUpload {
 				'lockType' => isset($emConf['lockType']) ? utf8_encode($emConf['lockType']) : '',
 				'doNotLoadInFE' => isset($emConf['doNotLoadInFE']) ? utf8_encode($emConf['doNotLoadInFE']) : '',
 				'docPath' => isset($emConf['docPath']) ? utf8_encode($emConf['docPath']) : '',
-				'autoload' => isset($emConf['autoload']) ?
-					(array_walk_recursive($emConf['autoload'], function(&$v){$v = utf8_encode($v);}) ?
-						$emConf['autoload'] : array()) : array(),
+				'autoload' => $this->getAutoloadArray(),
 			),
 			'infoData' => array(
 				'codeLines' => 0,
@@ -180,6 +178,24 @@ class TerUpload {
 			$this->emConf = Helper::getEmConf($this->extensionKey, $this->path);
 		}
 		return $this->emConf;
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function getAutoloadArray() {
+		$emConf = $this->getEmConf();
+		if (isset($emConf['autoload'])) {
+			array_walk_recursive(
+					$emConf['autoload'],
+					function(&$v) {
+						$v = utf8_encode($v);
+					}
+			);
+			return $emConf['autoload'];
+		} else {
+			return array();
+		}
 	}
 
 	/**
