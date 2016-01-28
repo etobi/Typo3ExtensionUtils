@@ -87,7 +87,7 @@ class SelfController {
 		} else {
 			throw new \Exception('selfupdate does only work, when running the .phar');
 		}
-		return;
+		return true;
 	}
 
 	/**

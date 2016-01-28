@@ -6,6 +6,13 @@ namespace etobi\extensionUtils\Controller;
  *
  */
 class T3xController {
+	/**
+	 * @param string $extensionKey
+	 * @param string $sourcePath
+	 * @param string $t3xFilePath
+	 * @return bool
+	 * @throws \Exception
+	 */
 	public function createAction($extensionKey, $sourcePath, $t3xFilePath) {
 		$sourcePath = rtrim($sourcePath, '/') . '/';
 
@@ -44,11 +51,13 @@ class T3xController {
 			throw new \Exception('Error writing "' . $t3xFilePath . '"');
 		}
 		echo 'created "' . $t3xFilePath . '"' . chr(10);
+		return true;
 	}
 
 	/**
 	 * @param string $t3xFilePath
 	 * @param string $destinationPath
+	 * @return bool
 	 * @throws \Exception
 	 */
 	public function extractAction($t3xFilePath, $destinationPath) {
@@ -71,10 +80,12 @@ class T3xController {
 		$this->writeFiles($extensionData['FILES'], $destinationPath);
 		$this->writeEmConf($extensionData['extKey'], $extensionData['EM_CONF'], $destinationPath);
 		echo 'extracted "' . $t3xFilePath . '" to "' . $destinationPath . '"' . chr(10);
+		return true;
 	}
 
 	/**
 	 * @param string $t3xFilePath
+	 * @return bool
 	 * @throws \Exception
 	 */
 	public function listFilesAction($t3xFilePath, $fullDetails = FALSE) {
@@ -84,10 +95,12 @@ class T3xController {
 
 		$extensionData = $this->extractExtensionDataFromT3x($t3xFilePath);
 		$this->listFiles($extensionData['FILES'], $fullDetails);
+		return true;
 	}
 
 	/**
 	 * @param string $t3xFilePath
+	 * @return bool
 	 * @throws \Exception
 	 */
 	public function showMetaDataAction($t3xFilePath) {
@@ -97,6 +110,7 @@ class T3xController {
 
 		$extensionData = $this->extractExtensionDataFromT3x($t3xFilePath);
 		$this->showMetaData($extensionData['EM_CONF']);
+		return true;
 	}
 
 	/**

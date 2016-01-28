@@ -19,6 +19,7 @@ class TerController {
 	 * @param $version
 	 * @param string $destinationPath
 	 * @param bool $useCurl use 'curl' instead of 'wget'
+	 * @return bool
 	 */
 	public function fetchAction($extensionKey, $version = NULL, $destinationPath = NULL, $useCurl = false) {
 		// Find latest version
@@ -49,6 +50,7 @@ class TerController {
 		} else {
 			exec('wget "' . $url . '" -O ' . ($destinationPath ?: '.') . '/' . $t3xFile);
 		}
+		return true;
 	}
 
 	/**
@@ -69,6 +71,7 @@ class TerController {
 	/**
 	 * @param string $extensionKey
 	 * @param string $version
+	 * @return bool
 	 */
 	public function infoAction($extensionKey, $version = NULL) {
 		$result = $this->queryExtensionsXML(
@@ -122,6 +125,7 @@ class TerController {
 						chr(10);
 			}
 		}
+		return true;
 	}
 
 	/**
@@ -150,7 +154,7 @@ class TerController {
 			return FALSE;
 		}
 
-		if (!is_array($response)) {
+		if (is_string($response)) {
 			echo 'Error: ' . $response . chr(10);
 			return FALSE;
 		}
@@ -166,8 +170,8 @@ class TerController {
 	 *
 	 * query extension xml
 	 *
-	 * @param $query xpath query
-	 * @returns DOMNodeList
+	 * @param string $query query
+	 * @returns \DOMNodeList
 	 */
 	protected function queryExtensionsXML($query) {
 		if (!file_exists($this->extensionsXmlFile) || (time() - filemtime($this->extensionsXmlFile)) > 3600) {

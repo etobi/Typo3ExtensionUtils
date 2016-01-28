@@ -94,7 +94,8 @@ class Dispatcher {
 	}
 
 	/**
-	 *
+	 * @param string $command
+	 * @return bool
 	 */
 	protected function helpCommand($command = NULL) {
 		$usages = array(
@@ -127,14 +128,20 @@ class Dispatcher {
 		return TRUE;
 	}
 
+	/**
+	 * @return bool
+	 */
 	protected function checkForUpdateCommand() {
 		$controller = new \etobi\extensionUtils\Controller\SelfController();
-		$controller->checkForUpdateAction();
+		return $controller->checkForUpdateAction();
 	}
 
+	/**
+	 * @return bool|void
+	 */
 	protected function selfUpdateCommand() {
 		$controller = new \etobi\extensionUtils\Controller\SelfController();
-		$controller->updateAction();
+		return $controller->updateAction();
 	}
 
 	/**
@@ -191,6 +198,7 @@ class Dispatcher {
 
 	/**
 	 * @param array $arguments
+	 * @return bool|void
 	 */
 	protected function fetchCommand($arguments) {
 		if (count($arguments) !== 1 && count($arguments) !== 2 && count($arguments) !== 3) {
