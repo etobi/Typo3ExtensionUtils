@@ -50,8 +50,7 @@ class Dispatcher {
 				$success = $this->uploadCommand($arguments);
 				break;
 			case 'updateinfo':
-				$controller = new \etobi\extensionUtils\Controller\TerController();
-				$success = $controller->updateAction();
+				$success = $this->updateinfoCommand($arguments);
 				break;
 			case 'info':
 				$success = $this->infoCommand($arguments);
@@ -101,9 +100,9 @@ class Dispatcher {
 		$usages = array(
 			'help' => 'help',
 			'version' => 'version',
-			'updateinfo' => 'updateinfo',
+			'updateinfo' => 'updateinfo [--use-curl]',
 			'info' => 'info <extensionKey> [<version>]',
-			'fetch' => 'fetch <extensionKey> [<version>] [<destinationPath>]',
+			'fetch' => 'fetch <extensionKey> [<version>] [<destinationPath>] [--use-curl]',
 			'upload' => 'upload <typo3.org-username> <typo3.org-password> <extensionKey> "<uploadComment>" <pathToExtension>',
 			'extract' => 'extract <t3x-file> <destinationPath>',
 			'listfiles' => 'listfiles <t3x-file> [details]',
@@ -159,6 +158,21 @@ class Dispatcher {
 	}
 
 	/**
+	 * @param array $arguments
+	 * @return bool
+	 */
+	protected function updateinfoCommand($arguments) {
+		$controller = new \etobi\extensionUtils\Controller\TerController();
+
+		$useCurl = false;
+		if (isset($arguments[0]) && $arguments[0] == '--use-curl') {
+			$useCurl = true;
+		}
+
+		return $controller->updateAction($useCurl);
+	}
+
+	/**
 	 * @param $arguments
 	 * @return bool
 	 */
@@ -166,6 +180,7 @@ class Dispatcher {
 		if (count($arguments) !== 1 && count($arguments) !== 2) {
 			return $this->helpCommand('info');
 		}
+
 		$controller = new \etobi\extensionUtils\Controller\TerController();
 		$success = $controller->infoAction(
 			$arguments[0],
@@ -181,11 +196,22 @@ class Dispatcher {
 		if (count($arguments) !== 1 && count($arguments) !== 2 && count($arguments) !== 3) {
 			return $this->helpCommand('fetch');
 		}
+
+		$useCurl = false;
+		foreach ($arguments as $key => $value) {
+			if ($value == '--use-curl') {
+				$useCurl = true;
+				unset($arguments[$key]);
+			}
+		}
+		$arguments = array_values($arguments);
+
 		$controller = new \etobi\extensionUtils\Controller\TerController();
 		$success = $controller->fetchAction(
 			$arguments[0],
 			isset($arguments[1]) ? $arguments[1] : NULL,
-			isset($arguments[2]) ? $arguments[2] : NULL
+			isset($arguments[2]) ? $arguments[2] : NULL,
+			$useCurl
 		);
 		return $success;
 	}

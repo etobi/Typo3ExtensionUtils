@@ -18,8 +18,9 @@ class TerController {
 	 * @param $extensionKey
 	 * @param $version
 	 * @param string $destinationPath
+	 * @param bool $useCurl use 'curl' instead of 'wget'
 	 */
-	public function fetchAction($extensionKey, $version = NULL, $destinationPath = NULL) {
+	public function fetchAction($extensionKey, $version = NULL, $destinationPath = NULL, $useCurl = false) {
 		// Find latest version
 		if ($version === NULL) {
 			$result = $this->queryExtensionsXML(
@@ -42,18 +43,27 @@ class TerController {
 			}
 		}
 		$t3xFile = $extensionKey . '_' . $version . '.t3x';
-		$url = 'http://typo3.org/fileadmin/ter/' . $extensionKey{0} . '/' . $extensionKey{1} . '/' . $t3xFile;
-		exec('wget "' . $url . '" -O ' . ($destinationPath ?: '.') . '/' . $t3xFile);
+		$url = 'https://typo3.org/fileadmin/ter/' . $extensionKey{0} . '/' . $extensionKey{1} . '/' . $t3xFile;
+		if ($useCurl) {
+			exec('curl --location --silent "' . $url . '" --output ' . ($destinationPath ?: '.') . '/' . $t3xFile);
+		} else {
+			exec('wget "' . $url . '" -O ' . ($destinationPath ?: '.') . '/' . $t3xFile);
+		}
 	}
 
 	/**
-	 *
+	 * @param bool $useCurl use 'curl' instead of 'wget'
+	 * @return bool
 	 */
-	public function updateAction() {
-		 // TODO
+	public function updateAction($useCurl = false) {
 		echo 'fetch extension info ...' . chr(10);
-		$url = 'http://typo3.org/fileadmin/ter/extensions.xml.gz';
-		exec('wget "' . $url . '" -q -O - | gunzip > ' . $this->extensionsXmlFile);
+		$url = 'https://typo3.org/fileadmin/ter/extensions.xml.gz';
+		if ($useCurl) {
+			exec('curl --location --silent "' . $url . '" | gunzip > ' . $this->extensionsXmlFile);
+		} else {
+			exec('wget "' . $url . '" -q -O - | gunzip > ' . $this->extensionsXmlFile);
+		}
+		return true;
 	}
 
 	/**
