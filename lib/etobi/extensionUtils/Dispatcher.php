@@ -201,7 +201,7 @@ class Dispatcher {
 	 * @return bool|void
 	 */
 	protected function fetchCommand($arguments) {
-		if (count($arguments) !== 1 && count($arguments) !== 2 && count($arguments) !== 3) {
+		if (count($arguments) !== 1 && count($arguments) !== 2 && count($arguments) !== 3 && count($arguments) !== 4) {
 			return $this->helpCommand('fetch');
 		}
 
