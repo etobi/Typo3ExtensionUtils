@@ -156,15 +156,17 @@ $EM_CONF[$_EXTKEY] = ' . var_export($emConf, TRUE) . ';
 			if ($info['content_md5'] !== md5($info['content'])) {
 				throw new \Exception('MD5 hash of "' . $info['name'] . '" doesnt match');
 			} else {
-				$fileHandler = fopen($fullFilePath, 'wb');
-				if (empty($info['content'])) {
-					$res = TRUE;
-				} else {
-					$res = fwrite($fileHandler, $info['content']);
-				}
-				fclose($fileHandler);
-				if (!$res) {
-					throw new \Exception('Cant write file "' . $fullFilePath . '"');
+				if (!is_dir($fullFilePath)) {
+					$fileHandler = fopen($fullFilePath, 'wb');
+					if (empty($info['content'])) {
+						$res = TRUE;
+					} else {
+						$res = fwrite($fileHandler, $info['content']);
+					}
+					fclose($fileHandler);
+					if (!$res) {
+						throw new \Exception('Cant write file "' . $fullFilePath . '"');
+					}
 				}
 			}
 		}
