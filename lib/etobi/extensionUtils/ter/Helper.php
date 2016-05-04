@@ -173,7 +173,7 @@ class Helper {
 	 * @return array
 	 * @throws \Exception
 	 */
-	public static function getExtensionFilesData($path, $excludeForPackaging = '(CVS|\..*|.*~|.*\.bak)', $maxUploadSize = 31457280) {
+	public static function getExtensionFilesData($path, $excludeForPackaging = '(CVS|\..*|.*~|.*\.bak)', $maxUploadSize = 51457280) {
 		$path = rtrim($path, '/') . '/';
 
 		if (!is_dir($path) || !is_readable($path)) {
